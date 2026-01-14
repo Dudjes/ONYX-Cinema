@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('movieName');
             $table->string('ageRequirement');
             $table->time('duration');
+            $table->text('description');
             $table->dateTime('isDeleted')->nullable();
-            $table->foreignId('genreId')->constrained()->onDelete('cascade');
+            $table->foreignId('genreId')->constrained('genres', 'genreId')->onDelete('cascade');
             $table->timestamps();
         });
     }
