@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use App\Models\play as PlayModel;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreTicketRequest;
+use App\Http\Requests\UpdateTicketRequest;
 
 class TicketController extends Controller
 {
@@ -31,14 +32,9 @@ class TicketController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTicketRequest $request)
     {
-        $data = $request->validate([
-            'seat' => 'required|string|max:10',
-            'playId' => 'required|exists:plays,playId',
-            'userId' => 'required|exists:users,id',
-            'isSold' => 'required|boolean',
-        ]);
+        $data = $request->validated();
 
         Ticket::create($data);
 
@@ -66,14 +62,9 @@ class TicketController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Ticket $ticket)
+    public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
-        $data = $request->validate([
-            'seat' => 'required|string|max:10',
-            'playId' => 'required|exists:plays,playId',
-            'userId' => 'required|exists:users,id',
-            'isSold' => 'required|boolean',
-        ]);
+        $data = $request->validated();
 
         $ticket->update($data);
 

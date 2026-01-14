@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Hall;
 use App\Models\Cinema;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreHallRequest;
+use App\Http\Requests\UpdateHallRequest;
 
 class HallController extends Controller
 {
@@ -29,13 +30,9 @@ class HallController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreHallRequest $request)
     {
-        $data = $request->validate([
-            'hallNumber' => 'required|integer',
-            'capacity' => 'required|integer',
-            'cinemaId' => 'required|exists:cinemas,cinemaId',
-        ]);
+        $data = $request->validated();
 
         Hall::create($data);
 
@@ -62,13 +59,9 @@ class HallController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Hall $hall)
+    public function update(UpdateHallRequest $request, Hall $hall)
     {
-        $data = $request->validate([
-            'hallNumber' => 'required|integer',
-            'capacity' => 'required|integer',
-            'cinemaId' => 'required|exists:cinemas,cinemaId',
-        ]);
+        $data = $request->validated();
 
         $hall->update($data);
 

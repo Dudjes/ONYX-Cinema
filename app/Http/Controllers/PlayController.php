@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\play as PlayModel;
+use App\Models\Play as PlayModel;
 use App\Models\Movie;
 use App\Models\Hall;
 use App\Models\Cinema;
-use Illuminate\Http\Request;
+use App\Http\Requests\StorePlayRequest;
+use App\Http\Requests\UpdatePlayRequest;
 
 class PlayController extends Controller
 {
@@ -33,14 +34,9 @@ class PlayController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePlayRequest $request)
     {
-        $data = $request->validate([
-            'when' => 'required|date',
-            'movieId' => 'required|exists:movies,movieId',
-            'hallId' => 'required|exists:halls,hallId',
-            'cinemaId' => 'required|exists:cinemas,cinemaId',
-        ]);
+        $data = $request->validated();
 
         PlayModel::create($data);
 
@@ -50,7 +46,7 @@ class PlayController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(play $play)
+    public function show(Play $play)
     {
         return view('plays.show', compact('play'));
     }
@@ -58,7 +54,7 @@ class PlayController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(play $play)
+    public function edit(Play $play)
     {
         $movies = Movie::all();
         $halls = Hall::all();
@@ -69,14 +65,9 @@ class PlayController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, play $play)
+    public function update(UpdatePlayRequest $request, Play $play)
     {
-        $data = $request->validate([
-            'when' => 'required|date',
-            'movieId' => 'required|exists:movies,movieId',
-            'hallId' => 'required|exists:halls,hallId',
-            'cinemaId' => 'required|exists:cinemas,cinemaId',
-        ]);
+        $data = $request->validated();
 
         $play->update($data);
 

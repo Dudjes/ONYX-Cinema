@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cinema;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreCinemaRequest;
+use App\Http\Requests\UpdateCinemaRequest;
 
 class CinemaController extends Controller
 {
@@ -27,13 +28,9 @@ class CinemaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCinemaRequest $request)
     {
-        $data = $request->validate([
-            'cinemaName' => 'required|string|max:255',
-            'adress' => 'nullable|string|max:255',
-            'screenSize' => 'nullable|numeric',
-        ]);
+        $data = $request->validated();
 
         Cinema::create($data);
 
@@ -59,13 +56,9 @@ class CinemaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Cinema $cinema)
+    public function update(UpdateCinemaRequest $request, Cinema $cinema)
     {
-        $data = $request->validate([
-            'cinemaName' => 'required|string|max:255',
-            'adress' => 'nullable|string|max:255',
-            'screenSize' => 'nullable|numeric',
-        ]);
+        $data = $request->validated();
 
         $cinema->update($data);
 

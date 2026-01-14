@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreAccountRequest;
+use App\Http\Requests\UpdateAccountRequest;
 
 class AccountController extends Controller
 {
@@ -27,14 +28,9 @@ class AccountController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreAccountRequest $request)
     {
-        $data = $request->validate([
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'nullable|string|max:255',
-            'email' => 'required|email|unique:accounts,email',
-            'password' => 'required|string|min:6',
-        ]);
+        $data = $request->validated();
 
         $data['password'] = bcrypt($data['password']);
 
@@ -62,14 +58,9 @@ class AccountController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Account $account)
+    public function update(UpdateAccountRequest $request, Account $account)
     {
-        $data = $request->validate([
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'nullable|string|max:255',
-            'email' => 'required|email|unique:accounts,email,' . $account->accountId . ',accountId',
-            'password' => 'nullable|string|min:6',
-        ]);
+        $data = $request->validated();
 
         if (!empty($data['password'])) {
             $data['password'] = bcrypt($data['password']);
