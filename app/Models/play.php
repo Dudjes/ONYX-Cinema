@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class play extends Model
+class Play extends Model
 {
     protected $primaryKey = 'playId';
 

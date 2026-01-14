@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Play as PlayModel;
+use App\Models\Play;
 use App\Models\Movie;
 use App\Models\Hall;
 use App\Models\Cinema;
@@ -16,7 +16,7 @@ class PlayController extends Controller
      */
     public function index()
     {
-        $plays = PlayModel::with(['movie', 'hall', 'cinema'])->latest()->get();
+        $plays = Play::with(['movie', 'hall', 'cinema'])->latest()->get();
         return view('plays.index', compact('plays'));
     }
 
@@ -28,6 +28,7 @@ class PlayController extends Controller
         $movies = Movie::all();
         $halls = Hall::all();
         $cinemas = Cinema::all();
+
         return view('plays.create', compact('movies', 'halls', 'cinemas'));
     }
 
@@ -38,7 +39,7 @@ class PlayController extends Controller
     {
         $data = $request->validated();
 
-        PlayModel::create($data);
+        Play::create($data);
 
         return redirect()->route('plays.index')->with('status', 'Play created.');
     }
@@ -59,6 +60,7 @@ class PlayController extends Controller
         $movies = Movie::all();
         $halls = Hall::all();
         $cinemas = Cinema::all();
+
         return view('plays.edit', compact('play', 'movies', 'halls', 'cinemas'));
     }
 
@@ -77,9 +79,10 @@ class PlayController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(play $play)
+    public function destroy(Play $play)
     {
         $play->delete();
+
         return redirect()->route('plays.index')->with('status', 'Play deleted.');
     }
 }
