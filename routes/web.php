@@ -22,10 +22,9 @@ Route::middleware(['auth'])->group(function () {
     // Movie management (authenticated)
     Route::get('/movies/create', [MovieController::class, 'create'])->name('movies.create');
     Route::post('/movie/store', [MovieController::class, 'store'])->name('movies.store');
-    Route::get('/movies/edit', [MovieController::class, 'edit'])->name('movies.edit');
+    Route::get('/movies/{movie}/edit', [MovieController::class, 'edit'])->name('movies.edit');
+    Route::put('/movies/{movie}', [MovieController::class, 'update'])->name('movies.update');
 });
-
-Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 
 // Public movie routes
 Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');

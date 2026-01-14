@@ -5,8 +5,7 @@
             <div class="bg-charcoal rounded-2xl p-8 shadow-lg">
                 <h2 class="text-2xl font-display text-gold mb-6">Edit Movie</h2>
 
-                <form action="{{ route('movies.update', $movie) }}" method="POST" enctype="multipart/form-data"
-                    class="space-y-6">
+                <form action="{{ route('movies.update', $movie) }}" method="POST" class="space-y-6">
                     @csrf
                     @method('PUT')
 
@@ -75,10 +74,28 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm text-silver mb-2">Poster</label>
-                            <input type="file" name="image" class="w-full text-sm text-soft-white">
+                            <label class="block text-sm text-silver mb-2">Poster URL</label>
+                            <input type="text" name="image" value="{{ old('image', $movie->image) }}"
+                                placeholder="https://example.com/poster.jpg"
+                                class="w-full px-4 py-3 rounded-lg bg-onyx text-soft-white border border-gold/20">
                             @if ($movie->image ?? false)
-                                <p class="text-sm text-silver mt-2">Current: <span class="text-gold">{{ basename($movie->image) }}</span></p>
+                                <div class="mt-2 flex items-center gap-3">
+                                    @php
+                                        $src = \Illuminate\Support\Str::startsWith($movie->image, [
+                                            'http://',
+                                            'https://',
+                                            '//',
+                                        ])
+                                            ? $movie->image
+                                            : asset('storage/' . $movie->image);
+                                    @endphp
+                                    <img src="{{ $src }}" alt="Current poster"
+                                        class="w-24 h-36 object-cover rounded" />
+                                    <label class="inline-flex items-center gap-2 text-sm text-silver">
+                                        <input type="checkbox" name="remove_image" value="1" class="form-checkbox">
+                                        Remove image
+                                    </label>
+                                </div>
                             @endif
                             @error('image')
                                 <p class="text-sm text-red-400 mt-1">{{ $message }}</p>

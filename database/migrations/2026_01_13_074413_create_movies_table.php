@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('ageRequirement');
             $table->time('duration');
             $table->text('description');
+            $table->string('image')->nullable();
             $table->dateTime('isDeleted')->nullable();
             $table->foreignId('genreId')->constrained('genres', 'genreId')->onDelete('cascade');
             $table->timestamps();

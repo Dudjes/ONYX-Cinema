@@ -10,7 +10,8 @@
         </div>
 
         <div class="relative z-10 text-center px-6 animate-fadeInUp">
-            <h1 class="font-display text-5xl md:text-6xl font-bold text-gold mb-4 drop-shadow-[0_0_30px_rgba(212,175,55,0.5)]">
+            <h1
+                class="font-display text-5xl md:text-6xl font-bold text-gold mb-4 drop-shadow-[0_0_30px_rgba(212,175,55,0.5)]">
                 Now Showing
             </h1>
             <p class="text-xl text-silver">Discover the magic on the big screen</p>
@@ -21,14 +22,26 @@
     <section class="py-16 px-6 lg:px-12">
         <div class="container mx-auto">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                
+
                 @forelse($movies as $movie)
                     <!-- Movie Card -->
-                    <div class="bg-charcoal rounded-2xl overflow-hidden shadow-lg hover:-translate-y-3 hover:shadow-[0_15px_40px_rgba(0,229,255,0.3)] transition-all duration-300 cursor-pointer group">
+                    <div
+                        class="bg-charcoal rounded-2xl overflow-hidden shadow-lg hover:-translate-y-3 hover:shadow-[0_15px_40px_rgba(0,229,255,0.3)] transition-all duration-300 cursor-pointer group">
                         <!-- Movie Poster -->
-                        <div class="h-96 flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-charcoal via-gold/20 to-gold">
-                            @if(!empty($movie->image))
-                                <img src="{{ asset('storage/' . $movie->image) }}" alt="{{ $movie->movieName }}" class="w-full h-96 object-cover" />
+                        <div
+                            class="h-96 flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-charcoal via-gold/20 to-gold">
+                            @if (!empty($movie->image))
+                                @php
+                                    $src = \Illuminate\Support\Str::startsWith($movie->image, [
+                                        'http://',
+                                        'https://',
+                                        '//',
+                                    ])
+                                        ? $movie->image
+                                        : asset('storage/' . $movie->image);
+                                @endphp
+                                <img src="{{ $src }}" alt="{{ $movie->movieName }}"
+                                    class="w-full h-96 object-cover" />
                             @else
                                 <div class="w-full h-full flex items-center justify-center">
                                     <span class="text-8xl opacity-20">🎬</span>
@@ -36,7 +49,8 @@
                             @endif
 
                             <!-- Play Overlay -->
-                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                 <div class="text-center">
                                     <span class="text-cyan text-5xl mb-2 block">▶️</span>
                                     <span class="text-soft-white text-sm">Watch Trailer</span>
@@ -44,7 +58,8 @@
                             </div>
 
                             <!-- Age Rating Badge -->
-                            <div class="absolute top-4 right-4 bg-gold text-onyx px-3 py-1 rounded-lg text-sm font-bold">
+                            <div
+                                class="absolute top-4 right-4 bg-gold text-onyx px-3 py-1 rounded-lg text-sm font-bold">
                                 {{ $movie->ageRequirement }}
                             </div>
                         </div>
@@ -54,12 +69,12 @@
                             <h3 class="text-xl font-semibold text-soft-white mb-2 line-clamp-1">
                                 {{ $movie->movieName }}
                             </h3>
-                            
+
                             <div class="flex items-center gap-2 text-silver text-sm mb-1">
                                 <span>🎭</span>
                                 <span>{{ $movie->genre->genreName }}</span>
                             </div>
-                            
+
                             <div class="flex items-center gap-2 text-silver text-sm mb-4">
                                 <span>⏱️</span>
                                 <span>{{ \Carbon\Carbon::parse($movie->duration)->format('H\h i\m') }}</span>
@@ -67,10 +82,12 @@
 
                             <!-- Action Buttons -->
                             <div class="flex gap-2">
-                                <a href="#" class="flex-1 bg-gold text-onyx py-3 rounded-lg font-semibold text-center hover:bg-cyan hover:scale-105 transition-all duration-300">
+                                <a href="#"
+                                    class="flex-1 bg-gold text-onyx py-3 rounded-lg font-semibold text-center hover:bg-cyan hover:scale-105 transition-all duration-300">
                                     Book Now
                                 </a>
-                                <a href="{{ route('movies.show', $movie->movieId) }}" class="px-4 py-3 border-2 border-gold text-gold rounded-lg hover:bg-gold hover:text-onyx transition-all duration-300 flex items-center gap-2">
+                                <a href="{{ route('movies.show', $movie->movieId) }}"
+                                    class="px-4 py-3 border-2 border-gold text-gold rounded-lg hover:bg-gold hover:text-onyx transition-all duration-300 flex items-center gap-2">
                                     <span>ℹ️</span>
                                     <span>Details</span>
                                 </a>

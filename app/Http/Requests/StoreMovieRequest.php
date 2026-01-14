@@ -27,7 +27,7 @@ class StoreMovieRequest extends FormRequest
             'duration' => ['required', 'date_format:H:i'],
             'genre_id' => ['required', 'exists:genres,genreId'],
             'description' => ['nullable', 'string'],
-            'image' => ['nullable', 'image', 'max:2048'],
+            'image' => ['nullable', 'string', 'max:2048'],
         ];
     }
 }

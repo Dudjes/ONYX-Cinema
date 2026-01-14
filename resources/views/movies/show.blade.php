@@ -1,4 +1,4 @@
-{{-- resources/views/movies/show.blade.php --}} 
+{{-- resources/views/movies/show.blade.php --}}
 <x-layout :title="$movie->movieName">
 
     <section class="py-16 px-6 lg:px-12">
@@ -6,10 +6,11 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-1">
                     <div class="bg-charcoal rounded-2xl overflow-hidden shadow-lg">
-                        @if(!empty($movie->image))
-                            <img src="{{ asset('storage/' . $movie->image) }}" alt="{{ $movie->movieName }}" class="w-full h-96 object-cover" />
+                        @if (!empty($movie->image))
+                            <img src="{{$movie->image}}" alt="movieImage">
                         @else
-                            <div class="w-full h-96 flex items-center justify-center bg-gradient-to-br from-charcoal via-gold/20 to-gold">
+                            <div
+                                class="w-full h-96 flex items-center justify-center bg-gradient-to-br from-charcoal via-gold/20 to-gold">
                                 <span class="text-8xl opacity-20">🎬</span>
                             </div>
                         @endif
@@ -22,7 +23,8 @@
                     <div class="flex items-center gap-4 text-silver mb-6">
                         <div class="px-3 py-1 bg-gold text-onyx rounded-md">{{ $movie->ageRequirement }}</div>
                         <div class="flex items-center gap-2">🎭 <span>{{ $movie->genre->genreName }}</span></div>
-                        <div class="flex items-center gap-2">⏱️ <span>{{ \Carbon\Carbon::parse($movie->duration)->format('H\h i\m') }}</span></div>
+                        <div class="flex items-center gap-2">⏱️
+                            <span>{{ \Carbon\Carbon::parse($movie->duration)->format('H\h i\m') }}</span></div>
                     </div>
 
                     <div class="prose prose-invert text-silver mb-8">
@@ -31,7 +33,8 @@
 
                     <div class="flex gap-4">
                         <a href="#" class="bg-gold text-onyx px-6 py-3 rounded-lg font-semibold">Book Tickets</a>
-                        <a href="{{ route('movies.index') }}" class="border border-gold text-gold px-6 py-3 rounded-lg">Back</a>
+                        <a href="{{ route('movies.index') }}"
+                            class="border border-gold text-gold px-6 py-3 rounded-lg">Back</a>
                     </div>
                 </div>
             </div>

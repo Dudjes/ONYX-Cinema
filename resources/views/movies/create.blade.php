@@ -65,8 +65,10 @@
             </div>
 
             <div>
-                <label class="block text-sm text-silver mb-1">Poster Image (optional)</label>
-                <input type="file" name="image" class="w-full text-sm text-soft-white">
+                <label class="block text-sm text-silver mb-1">Poster Image URL (optional)</label>
+                <input type="text" name="image" value="{{ old('image') }}"
+                    placeholder="https://example.com/poster.jpg"
+                    class="w-full px-3 py-2 rounded border border-gold/20 bg-onyx text-soft-white">
                 @error('image')
                     <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                 @enderror
