@@ -5,6 +5,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name') }}</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind config + CDN fallback -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'onyx': '#0B0B0D',
+                        'charcoal': '#1C1F26',
+                        'gold': '#D4AF37',
+                        'cyan': '#00E5FF',
+                        'soft-white': '#F5F5F5',
+                        'silver': '#B3B3B3',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'body': ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --onyx: #0B0B0D;
+            --charcoal: #1C1F26;
+            --gold: #D4AF37;
+            --cyan: #00E5FF;
+            --soft-white: #F5F5F5;
+            --silver: #B3B3B3
+        }
+
+        .bg-onyx {
+            background-color: var(--onyx) !important
+        }
+
+        .bg-charcoal {
+            background-color: var(--charcoal) !important
+        }
+
+        .bg-gold {
+            background-color: var(--gold) !important
+        }
+
+        .bg-cyan {
+            background-color: var(--cyan) !important
+        }
+
+        .text-gold {
+            color: var(--gold) !important
+        }
+
+        .text-soft-white {
+            color: var(--soft-white) !important
+        }
+
+        .text-silver {
+            color: var(--silver) !important
+        }
+
+        .text-onyx {
+            color: var(--onyx) !important
+        }
+
+        .border-gold {
+            border-color: var(--gold) !important
+        }
+
+        .border-gold\/20 {
+            border-color: rgba(212, 175, 55, 0.2) !important
+        }
+
+        .font-display {
+            font-family: 'Playfair Display', serif
+        }
+    </style>
     <script>
         window.setAppearance = function(appearance) {
             let setDark = () => document.documentElement.classList.add('dark')
@@ -34,12 +115,14 @@
         window.setAppearance(window.localStorage.getItem('appearance') || 'system')
     </script>
 
+    <!-- Fallback Tailwind CDN so styles work without running Vite -->
+    <script src="https://cdn.tailwindcss.com"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 antialiased" x-data="{
     sidebarOpen: localStorage.getItem('sidebarOpen') === null ? window.innerWidth >= 1024 : localStorage.getItem('sidebarOpen') === 'true',
-    toggleSidebar() { 
+    toggleSidebar() {
         this.sidebarOpen = !this.sidebarOpen;
         localStorage.setItem('sidebarOpen', this.sidebarOpen);
     },
@@ -114,3 +197,4 @@
 </body>
 
 </html>
+

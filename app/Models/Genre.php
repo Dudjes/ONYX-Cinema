@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Genre extends Model
 {
+    protected $primaryKey = 'genreId';
+    public $incrementing = true;
     protected $fillable = ['genreName'];
-    
+
     public function movies()
     {
         return $this->hasMany(Movie::class, 'genreId');

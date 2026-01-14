@@ -26,9 +26,15 @@
                     <!-- Movie Card -->
                     <div class="bg-charcoal rounded-2xl overflow-hidden shadow-lg hover:-translate-y-3 hover:shadow-[0_15px_40px_rgba(0,229,255,0.3)] transition-all duration-300 cursor-pointer group">
                         <!-- Movie Poster -->
-                        <div class="h-96 bg-gradient-to-br from-charcoal via-gold/20 to-gold flex items-center justify-center relative overflow-hidden">
-                            <span class="text-8xl opacity-20">🎬</span>
-                            
+                        <div class="h-96 flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-charcoal via-gold/20 to-gold">
+                            @if(!empty($movie->image))
+                                <img src="{{ asset('storage/' . $movie->image) }}" alt="{{ $movie->movieName }}" class="w-full h-96 object-cover" />
+                            @else
+                                <div class="w-full h-full flex items-center justify-center">
+                                    <span class="text-8xl opacity-20">🎬</span>
+                                </div>
+                            @endif
+
                             <!-- Play Overlay -->
                             <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                 <div class="text-center">
@@ -64,9 +70,10 @@
                                 <a href="#" class="flex-1 bg-gold text-onyx py-3 rounded-lg font-semibold text-center hover:bg-cyan hover:scale-105 transition-all duration-300">
                                     Book Now
                                 </a>
-                                <button class="px-4 py-3 border-2 border-gold text-gold rounded-lg hover:bg-gold hover:text-onyx transition-all duration-300">
-                                    ℹ️
-                                </button>
+                                <a href="{{ route('movies.show', $movie->movieId) }}" class="px-4 py-3 border-2 border-gold text-gold rounded-lg hover:bg-gold hover:text-onyx transition-all duration-300 flex items-center gap-2">
+                                    <span>ℹ️</span>
+                                    <span>Details</span>
+                                </a>
                             </div>
                         </div>
                     </div>

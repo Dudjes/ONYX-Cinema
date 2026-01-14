@@ -8,7 +8,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::view('dashboard', 'dashboard')
+Route::view('dashboard', 'user.dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
@@ -19,8 +19,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/password', [Settings\PasswordController::class, 'edit'])->name('settings.password.edit');
     Route::put('settings/password', [Settings\PasswordController::class, 'update'])->name('settings.password.update');
     Route::get('settings/appearance', [Settings\AppearanceController::class, 'edit'])->name('settings.appearance.edit');
+    // Movie management (authenticated)
+    Route::get('/movies/create', [MovieController::class, 'create'])->name('movies.create');
+    Route::post('/movie/store', [MovieController::class, 'store'])->name('movies.store');
+    Route::get('/movies/edit', [MovieController::class, 'edit'])->name('movies.edit');
 });
 
 Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 
-require __DIR__.'/auth.php';
+// Public movie routes
+Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
+Route::get('/movies/{movie}', [MovieController::class, 'show'])->name('movies.show');
+
+
+require __DIR__ . '/auth.php';
