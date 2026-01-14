@@ -6,7 +6,14 @@
             <ul>
                 @foreach ($genres as $g)
                     <li class="py-2 border-b">{{ $g->genreName }}
-                        <a href="{{ route('genres.show', $g) }}" class="ml-2 text-gold">View</a>
+                        <a href="{{ route('genres.show', $g) }}" class="ml-2 text-gold">Detail</a>
+                        <a href="{{ route('genres.edit', $g) }}" class="ml-2 text-green-500">Edit</a>
+                        <form action="{{ route('genres.destroy', $g) }}" method="POST" class="inline-block ml-2">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-500"
+                                onclick="return confirm('Delete this genre?')">Delete</button>
+                        </form>
                     </li>
                 @endforeach
             </ul>
