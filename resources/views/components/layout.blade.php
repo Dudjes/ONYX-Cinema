@@ -156,40 +156,42 @@
                             class="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan group-hover:w-full transition-all duration-300 {{ Request::is('/') ? 'w-full bg-gold' : '' }}"></span>
                     </a>
 
-                    <!-- Movies Dropdown -->
-                    <div class="relative group">
-                        <a href=""
-                            class="relative text-soft-white hover:text-cyan transition-colors duration-300 {{ Request::is('movies*') ? 'text-gold' : '' }} flex items-center gap-1">
-                            Movies
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                            <span
-                                class="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan group-hover:w-full transition-all duration-300 {{ Request::is('movies*') ? 'w-full bg-gold' : '' }}"></span>
-                        </a>
+                    <!-- Movies Dropdown (authenticated users only) -->
+                    @auth
+                        <div class="relative group">
+                            <a href="{{ route('movies.dashboard') }}"
+                                class="relative text-soft-white hover:text-cyan transition-colors duration-300 {{ Request::is('movies*') ? 'text-gold' : '' }} flex items-center gap-1">
+                                Movies
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                                <span
+                                    class="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan group-hover:w-full transition-all duration-300 {{ Request::is('movies*') ? 'w-full bg-gold' : '' }}"></span>
+                            </a>
 
-                        <!-- Dropdown Menu -->
-                        <div
-                            class="absolute left-0 mt-2 w-56 bg-charcoal border-2 border-gold rounded-lg shadow-[0_0_30px_rgba(212,175,55,0.3)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-                            <a href="{{ route('movies.index') }}"
-                                class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200 rounded-t-lg">
-                                🎬 All Movies
-                            </a>
-                            <a href="{{ route('movies.create') }}"
-                                class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">
-                                ➕ Create Movie
-                            </a>
-                            <a href="#"
-                                class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">
-                                ✏️ Update Movie
-                            </a>
-                            <a href="#"
-                                class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200 rounded-b-lg">
-                                🗑️ Deleted Movies
-                            </a>
+                            <!-- Dropdown Menu -->
+                            <div
+                                class="absolute left-0 mt-2 w-56 bg-charcoal border-2 border-gold rounded-lg shadow-[0_0_30px_rgba(212,175,55,0.3)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                <a href="{{ route('movies.index') }}"
+                                    class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200 rounded-t-lg">
+                                    🎬 All Movies
+                                </a>
+                                <a href="{{ route('movies.create') }}"
+                                    class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">
+                                    ➕ Create Movie
+                                </a>
+                                <a href="#"
+                                    class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">
+                                    ✏️ Update Movie
+                                </a>
+                                <a href="#"
+                                    class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200 rounded-b-lg">
+                                    🗑️ Deleted Movies
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    @endauth
 
                     <a href=""
                         class="relative text-soft-white hover:text-cyan transition-colors duration-300 group {{ Request::is('schedule*') ? 'text-gold' : '' }}">
@@ -214,7 +216,41 @@
 
                     <!-- User Actions -->
                     @auth
-                        <a href="" class="text-soft-white hover:text-cyan transition-colors duration-300">
+                        <!-- Manage Dropdown (accounts, cinemas, genres, halls, plays, tickets) -->
+                        <div class="relative group">
+                            <a href="#"
+                                class="relative text-soft-white hover:text-cyan transition-colors duration-300 flex items-center gap-1">
+                                Manage
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                                <span
+                                    class="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan group-hover:w-full transition-all duration-300"></span>
+                            </a>
+
+                            <div
+                                class="absolute left-0 mt-2 w-56 bg-charcoal border-2 border-gold rounded-lg shadow-[0_0_30px_rgba(212,175,55,0.3)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                <a href="{{ route('accounts.index') }}"
+                                    class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200 rounded-t-lg">Accounts</a>
+                                <a href="{{ route('cinemas.index') }}"
+                                    class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">Cinemas</a>
+                                <a href="{{ route('genres.index') }}"
+                                    class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">Genres</a>
+                                <a href="{{ route('halls.index') }}"
+                                    class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">Halls</a>
+                                <a href="{{ route('plays.index') }}"
+                                    class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">Plays</a>
+                                <a href="{{ route('tickets.index') }}"
+                                    class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200 rounded-b-lg">Tickets</a>
+                            </div>
+                        </div>
+
+                    @endauth
+
+                    @auth
+                        <a href="{{ route('settings.profile.edit') }}"
+                            class="text-soft-white hover:text-cyan transition-colors duration-300">
                             My Account
                         </a>
                         <form action="{{ route('logout') }}" method="POST" class="inline">
@@ -249,31 +285,61 @@
                     Home
                 </a>
 
-                <!-- Mobile Movies Dropdown -->
-                <div>
-                    <button id="mobileMoviesToggle"
-                        class="text-soft-white hover:text-cyan transition-colors {{ Request::is('movies*') ? 'text-gold' : '' }} flex items-center gap-2 w-full">
-                        Movies
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
-                            </path>
-                        </svg>
-                    </button>
-                    <div id="mobileMoviesMenu" class="hidden flex-col gap-2 ml-4 mt-2">
-                        <a href="{{ route('movies.index') }}" class="text-silver hover:text-cyan transition-colors">
-                            🎬 All Movies
-                        </a>
-                        <a href="{{ route('movies.create') }}" class="text-silver hover:text-cyan transition-colors">
-                            ➕ Create Movie
-                        </a>
-                        <a href="#" class="text-silver hover:text-cyan transition-colors">
-                            ✏️ Update Movie
-                        </a>
-                        <a href="#" class="text-silver hover:text-cyan transition-colors">
-                            🗑️ Deleted Movies
-                        </a>
+                <!-- Mobile Movies Dropdown (authenticated only) -->
+                @auth
+                    <div>
+                        <button id="mobileMoviesToggle"
+                            class="text-soft-white hover:text-cyan transition-colors {{ Request::is('movies*') ? 'text-gold' : '' }} flex items-center gap-2 w-full">
+                            Movies
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                                </path>
+                            </svg>
+                        </button>
+                        <div id="mobileMoviesMenu" class="hidden flex-col gap-2 ml-4 mt-2">
+                            <a href="{{ route('movies.index') }}" class="text-silver hover:text-cyan transition-colors">
+                                🎬 All Movies
+                            </a>
+                            <a href="{{ route('movies.create') }}" class="text-silver hover:text-cyan transition-colors">
+                                ➕ Create Movie
+                            </a>
+                            <a href="#" class="text-silver hover:text-cyan transition-colors">
+                                ✏️ Update Movie
+                            </a>
+                            <a href="#" class="text-silver hover:text-cyan transition-colors">
+                                🗑️ Deleted Movies
+                            </a>
+                        </div>
                     </div>
-                </div>
+                @endauth
+
+                @auth
+                    <div>
+                        <button id="mobileManageToggle"
+                            class="text-soft-white hover:text-cyan transition-colors flex items-center gap-2 w-full">
+                            Manage
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                                </path>
+                            </svg>
+                        </button>
+
+                        <div id="mobileManageMenu" class="hidden flex-col gap-2 ml-4 mt-2">
+                            <a href="{{ route('accounts.index') }}"
+                                class="text-silver hover:text-cyan transition-colors">Accounts</a>
+                            <a href="{{ route('cinemas.index') }}"
+                                class="text-silver hover:text-cyan transition-colors">Cinemas</a>
+                            <a href="{{ route('genres.index') }}"
+                                class="text-silver hover:text-cyan transition-colors">Genres</a>
+                            <a href="{{ route('halls.index') }}"
+                                class="text-silver hover:text-cyan transition-colors">Halls</a>
+                            <a href="{{ route('plays.index') }}"
+                                class="text-silver hover:text-cyan transition-colors">Plays</a>
+                            <a href="{{ route('tickets.index') }}"
+                                class="text-silver hover:text-cyan transition-colors">Tickets</a>
+                        </div>
+                    </div>
+                @endauth
 
                 <a href=""
                     class="text-soft-white hover:text-cyan transition-colors {{ Request::is('schedule*') ? 'text-gold' : '' }}">
@@ -289,7 +355,8 @@
                 </a>
 
                 @auth
-                    <a href="" class="text-soft-white hover:text-cyan transition-colors">
+                    <a href="{{ route('settings.profile.edit') }}"
+                        class="text-soft-white hover:text-cyan transition-colors">
                         My Account
                     </a>
                     <form action="{{ route('logout') }}" method="POST">
@@ -430,6 +497,12 @@
             moviesMenu.classList.toggle('flex');
         });
 
+        // Mobile Manage Dropdown Toggle
+        document.getElementById('mobileManageToggle')?.addEventListener('click', function() {
+            const manageMenu = document.getElementById('mobileManageMenu');
+            manageMenu.classList.toggle('hidden');
+            manageMenu.classList.toggle('flex');
+        });
         // Close mobile menu when clicking outside
         document.addEventListener('click', function(event) {
             const mobileNav = document.getElementById('mobileNav');

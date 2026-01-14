@@ -12,7 +12,8 @@ class CinemaController extends Controller
      */
     public function index()
     {
-        //
+        $cinemas = Cinema::latest()->get();
+        return view('cinemas.index', compact('cinemas'));
     }
 
     /**
@@ -20,7 +21,7 @@ class CinemaController extends Controller
      */
     public function create()
     {
-        //
+        return view('cinemas.create');
     }
 
     /**
@@ -28,7 +29,15 @@ class CinemaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'cinemaName' => 'required|string|max:255',
+            'adress' => 'nullable|string|max:255',
+            'screenSize' => 'nullable|numeric',
+        ]);
+
+        Cinema::create($data);
+
+        return redirect()->route('cinemas.index')->with('status', 'Cinema created.');
     }
 
     /**
@@ -36,7 +45,7 @@ class CinemaController extends Controller
      */
     public function show(Cinema $cinema)
     {
-        //
+        return view('cinemas.show', compact('cinema'));
     }
 
     /**
@@ -44,7 +53,7 @@ class CinemaController extends Controller
      */
     public function edit(Cinema $cinema)
     {
-        //
+        return view('cinemas.edit', compact('cinema'));
     }
 
     /**
@@ -52,7 +61,15 @@ class CinemaController extends Controller
      */
     public function update(Request $request, Cinema $cinema)
     {
-        //
+        $data = $request->validate([
+            'cinemaName' => 'required|string|max:255',
+            'adress' => 'nullable|string|max:255',
+            'screenSize' => 'nullable|numeric',
+        ]);
+
+        $cinema->update($data);
+
+        return redirect()->route('cinemas.show', $cinema)->with('status', 'Cinema updated.');
     }
 
     /**
@@ -60,6 +77,7 @@ class CinemaController extends Controller
      */
     public function destroy(Cinema $cinema)
     {
-        //
+        $cinema->delete();
+        return redirect()->route('cinemas.index')->with('status', 'Cinema deleted.');
     }
 }

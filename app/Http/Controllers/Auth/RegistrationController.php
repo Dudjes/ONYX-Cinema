@@ -23,13 +23,20 @@ class RegistrationController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
 
-        event(new Registered(($user = User::create($validated))));
+        // split name into firstname/lastname and create User directly
+        [$firstname, $lastname] = array_pad(explode(' ', $validated['name'], 2), 2, '');
+
+        $userData = $validated;
+        $userData['firstname'] = $firstname ?: $validated['name'];
+        $userData['lastname'] = $lastname;
+
+        event(new Registered(($user = User::create($userData))));
 
         Auth::login($user);
 

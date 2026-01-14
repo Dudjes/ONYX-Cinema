@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('lastname');
             $table->string('email');
             $table->string('password');
-            $table->dateTime('isDeleted');
             $table->timestamps();
         });
     }

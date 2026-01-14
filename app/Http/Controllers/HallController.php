@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hall;
+use App\Models\Cinema;
 use Illuminate\Http\Request;
 
 class HallController extends Controller
@@ -12,7 +13,8 @@ class HallController extends Controller
      */
     public function index()
     {
-        //
+        $halls = Hall::with('cinema')->latest()->get();
+        return view('halls.index', compact('halls'));
     }
 
     /**
@@ -20,7 +22,8 @@ class HallController extends Controller
      */
     public function create()
     {
-        //
+        $cinemas = Cinema::all();
+        return view('halls.create', compact('cinemas'));
     }
 
     /**
@@ -28,7 +31,15 @@ class HallController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'hallNumber' => 'required|integer',
+            'capacity' => 'required|integer',
+            'cinemaId' => 'required|exists:cinemas,cinemaId',
+        ]);
+
+        Hall::create($data);
+
+        return redirect()->route('halls.index')->with('status', 'Hall created.');
     }
 
     /**
@@ -36,7 +47,7 @@ class HallController extends Controller
      */
     public function show(Hall $hall)
     {
-        //
+        return view('halls.show', compact('hall'));
     }
 
     /**
@@ -44,7 +55,8 @@ class HallController extends Controller
      */
     public function edit(Hall $hall)
     {
-        //
+        $cinemas = Cinema::all();
+        return view('halls.edit', compact('hall', 'cinemas'));
     }
 
     /**
@@ -52,7 +64,15 @@ class HallController extends Controller
      */
     public function update(Request $request, Hall $hall)
     {
-        //
+        $data = $request->validate([
+            'hallNumber' => 'required|integer',
+            'capacity' => 'required|integer',
+            'cinemaId' => 'required|exists:cinemas,cinemaId',
+        ]);
+
+        $hall->update($data);
+
+        return redirect()->route('halls.show', $hall)->with('status', 'Hall updated.');
     }
 
     /**
@@ -60,6 +80,7 @@ class HallController extends Controller
      */
     public function destroy(Hall $hall)
     {
-        //
+        $hall->delete();
+        return redirect()->route('halls.index')->with('status', 'Hall deleted.');
     }
 }

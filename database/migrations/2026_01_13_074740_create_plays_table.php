@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('plays', function (Blueprint $table) {
             $table->id('playId');
             $table->dateTime('when');
-            $table->dateTime('isDeleted');
             $table->foreignId('movieId')->constrained('movies', 'movieId')->onDelete('cascade');
             $table->foreignId('hallId')->constrained('halls', 'hallId')->onDelete('cascade');
             $table->foreignId('cinemaId')->constrained('cinemas', 'cinemaId')->onDelete('cascade');

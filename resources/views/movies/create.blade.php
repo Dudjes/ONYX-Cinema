@@ -16,12 +16,12 @@
             </div>
 
             <div>
-                <label class="block text-sm text-silver mb-1">Genre</label>
-                <select name="genre_id" class="w-full px-3 py-2 rounded border border-gold/20 bg-onyx text-soft-white">
-                    <option value="">Select genre</option>
+                <label class="block text-sm text-silver mb-1">Genre (select one or more)</label>
+                <select name="genre_id[]" multiple
+                    class="w-full px-3 py-2 rounded border border-gold/20 bg-onyx text-soft-white">
                     @foreach ($genres ?? [] as $genre)
                         <option value="{{ $genre->genreId }}"
-                            {{ old('genre_id') == $genre->genreId ? 'selected' : '' }}>
+                            {{ in_array($genre->genreId, (array) old('genre_id', [])) ? 'selected' : '' }}>
                             {{ $genre->genreName }}
                         </option>
                     @endforeach
@@ -36,6 +36,15 @@
                 <input type="text" name="duration" value="{{ old('duration') }}" placeholder="01:45"
                     class="w-full px-3 py-2 rounded border border-gold/20 bg-onyx text-soft-white">
                 @error('duration')
+                    <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm text-silver mb-1">Price (USD)</label>
+                <input type="text" name="price" value="{{ old('price') }}" placeholder="9.99"
+                    class="w-full px-3 py-2 rounded border border-gold/20 bg-onyx text-soft-white">
+                @error('price')
                     <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>

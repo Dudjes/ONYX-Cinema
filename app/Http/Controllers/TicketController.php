@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use App\Models\play as PlayModel;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -12,7 +14,8 @@ class TicketController extends Controller
      */
     public function index()
     {
-        //
+        $tickets = Ticket::with(['play', 'user'])->latest()->get();
+        return view('tickets.index', compact('tickets'));
     }
 
     /**
@@ -20,7 +23,9 @@ class TicketController extends Controller
      */
     public function create()
     {
-        //
+        $plays = PlayModel::all();
+        $users = User::all();
+        return view('tickets.create', compact('plays', 'users'));
     }
 
     /**
@@ -28,7 +33,16 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'seat' => 'required|string|max:10',
+            'playId' => 'required|exists:plays,playId',
+            'userId' => 'required|exists:users,id',
+            'isSold' => 'required|boolean',
+        ]);
+
+        Ticket::create($data);
+
+        return redirect()->route('tickets.index')->with('status', 'Ticket created.');
     }
 
     /**
@@ -36,7 +50,7 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        //
+        return view('tickets.show', compact('ticket'));
     }
 
     /**
@@ -44,7 +58,9 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket)
     {
-        //
+        $plays = PlayModel::all();
+        $users = User::all();
+        return view('tickets.edit', compact('ticket', 'plays', 'users'));
     }
 
     /**
@@ -52,7 +68,16 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
-        //
+        $data = $request->validate([
+            'seat' => 'required|string|max:10',
+            'playId' => 'required|exists:plays,playId',
+            'userId' => 'required|exists:users,id',
+            'isSold' => 'required|boolean',
+        ]);
+
+        $ticket->update($data);
+
+        return redirect()->route('tickets.show', $ticket)->with('status', 'Ticket updated.');
     }
 
     /**
@@ -60,6 +85,7 @@ class TicketController extends Controller
      */
     public function destroy(Ticket $ticket)
     {
-        //
+        $ticket->delete();
+        return redirect()->route('tickets.index')->with('status', 'Ticket deleted.');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Movie;
 
 class Genre extends Model
 {
@@ -12,6 +13,6 @@ class Genre extends Model
 
     public function movies()
     {
-        return $this->hasMany(Movie::class, 'genreId');
+        return $this->belongsToMany(Movie::class, '_movie__genre', 'genreId', 'movieId');
     }
 }

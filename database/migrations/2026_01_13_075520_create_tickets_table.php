@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id('ticketId');
             $table->string('seat');
-            $table->dateTime('isDeleted');
             $table->foreignId('playId')->constrained('plays', 'playId')->onDelete('cascade');
             $table->foreignId('accountId')->constrained('accounts', 'accountId')->onDelete('cascade');
+            $table->boolean('isSold');
             $table->timestamps();
         });
     }

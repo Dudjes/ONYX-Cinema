@@ -1,5 +1,4 @@
 <x-layout title="Dashboard - ONYX Cinema">
-
     <section class="py-12 px-6 lg:px-12">
         <div class="container mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -41,27 +40,86 @@
                     </div>
 
                     <div class="mt-8">
-                        <h3 class="text-lg font-semibold text-gold mb-3">Recent Movies</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            @foreach (\App\Models\Movie::latest()->take(4)->get() as $movie)
-                                <div class="p-4 bg-onyx/20 rounded-lg">
-                                    <div class="flex items-center justify-between">
-                                        <div>
-                                            <p class="text-sm text-silver">{{ $movie->movieName }}</p>
-                                            <p class="text-xs text-soft-white mt-1">
-                                                {{ $movie->genre->genreName ?? '—' }}</p>
-                                        </div>
-                                        <span
-                                            class="text-gold font-bold">{{ \Carbon\Carbon::parse($movie->duration)->format('H\h i\m') }}</span>
-                                    </div>
-                                </div>
-                            @endforeach
+                        <h3 class="text-lg font-semibold text-gold mb-3">All Movies</h3>
+                        <div class="overflow-x-auto bg-onyx/10 rounded-lg">
+                            <table class="min-w-full divide-y divide-onyx">
+                                <thead class="bg-onyx/20">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-xs text-silver">Poster</th>
+                                        <th class="px-4 py-3 text-left text-xs text-silver">Title</th>
+                                        <th class="px-4 py-3 text-left text-xs text-silver">Genre</th>
+                                        <th class="px-4 py-3 text-left text-xs text-silver">Duration</th>
+                                        <th class="px-4 py-3 text-left text-xs text-silver">Price</th>
+                                        <th class="px-4 py-3 text-left text-xs text-silver">Age</th>
+                                        <th class="px-4 py-3 text-left text-xs text-silver">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-onyx/5 divide-y divide-onyx">
+                                    @foreach (\App\Models\Movie::with('genres')->latest()->get() as $movie)
+                                        <tr class="hover:bg-onyx/20">
+                                            <td class="px-4 py-3 align-middle">
+                                                @if (!empty($movie->image))
+                                                    @php
+                                                        $src = \Illuminate\Support\Str::startsWith($movie->image, [
+                                                            'http://',
+                                                            'https://',
+                                                            '//',
+                                                        ])
+                                                            ? $movie->image
+                                                            : asset('storage/' . $movie->image);
+                                                    @endphp
+                                                    <img src="{{ $src }}" alt="{{ $movie->movieName }}"
+                                                        class="w-16 h-20 object-cover rounded" />
+                                                @else
+                                                    <div
+                                                        class="w-16 h-20 bg-gradient-to-br from-charcoal via-gold/20 to-gold rounded flex items-center justify-center">
+                                                        <span class="text-2xl opacity-20">🎬</span>
+                                                    </div>
+                                                @endif
+                                            </td>
+                                            <td class="px-4 py-3 align-middle">
+                                                <div class="text-sm text-soft-white font-semibold">
+                                                    {{ $movie->movieName }}</div>
+                                                <div class="text-xs text-silver">
+                                                    {{ Str::limit($movie->description, 60) }}</div>
+                                            </td>
+                                            <td class="px-4 py-3 align-middle text-sm text-silver">
+                                                {{ $movie->genres->pluck('genreName')->join(', ') ?: '—' }}</td>
+                                            <td class="px-4 py-3 align-middle text-sm text-silver">
+                                                {{ \Carbon\Carbon::parse($movie->duration)->format('H\\h i\\m') }}</td>
+                                            <td class="px-4 py-3 align-middle text-sm text-silver">
+                                                @if ($movie->price)
+                                                    ${{ number_format($movie->price, 2) }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td class="px-4 py-3 align-middle text-sm text-silver">
+                                                {{ $movie->ageRequirement }}</td>
+                                            <td class="px-4 py-3 align-middle">
+                                                <div class="flex items-center gap-2">
+                                                    <a href="{{ route('movies.show', $movie->movieId) }}"
+                                                        class="px-3 py-1 bg-onyx/20 border border-onyx text-silver rounded hover:bg-onyx/30">Details</a>
+                                                    <a href="{{ route('movies.edit', $movie->movieId) }}"
+                                                        class="px-3 py-1 bg-gold text-onyx rounded hover:bg-cyan">Update</a>
+                                                    <form action="{{ route('movies.destroy', $movie->movieId) }}"
+                                                        method="POST" onsubmit="return confirm('Delete this movie?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="px-3 py-1 border border-red-500 text-red-500 rounded hover:bg-red-500 hover:text-onyx">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </main>
             </div>
         </div>
     </section>
-
 </x-layout>
 

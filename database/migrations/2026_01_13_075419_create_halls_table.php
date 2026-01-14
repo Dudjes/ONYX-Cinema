@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('halls', function (Blueprint $table) {
             $table->id('hallId');
             $table->integer('hallNumber');
+            $table->integer('capacity');
             $table->foreignId('cinemaId')->constrained('cinemas', 'cinemaId')->onDelete('cascade');
             $table->timestamps();
         });

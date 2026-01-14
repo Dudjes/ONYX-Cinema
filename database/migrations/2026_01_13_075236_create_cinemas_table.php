@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('cinemas', function (Blueprint $table) {
             $table->id('cinemaId');
             $table->string('cinemaName');
-            $table->integer('capacity');
             $table->string('adress');
             $table->double('screenSize'); //in meters zoals 2.3 meter
             $table->timestamps();

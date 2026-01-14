@@ -21,13 +21,15 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm text-silver mb-2">Genre</label>
-                            <select name="genre_id"
+                            <label class="block text-sm text-silver mb-2">Genre (select one or more)</label>
+                            @php
+                                $selectedGenres = old('genre_id', $movie->genres->pluck('genreId')->toArray());
+                            @endphp
+                            <select name="genre_id[]" multiple
                                 class="w-full px-4 py-3 rounded-lg bg-onyx text-soft-white border border-gold/20">
-                                <option value="">Select genre</option>
                                 @foreach ($genres ?? [] as $genre)
                                     <option value="{{ $genre->genreId }}"
-                                        {{ old('genre_id', $movie->genreId) == $genre->genreId ? 'selected' : '' }}>
+                                        {{ in_array($genre->genreId, (array) $selectedGenres) ? 'selected' : '' }}>
                                         {{ $genre->genreName }}</option>
                                 @endforeach
                             </select>
@@ -45,6 +47,16 @@
                                 <p class="text-sm text-red-400 mt-1">{{ $message }}</p>
                             @enderror
                         </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-silver mb-2">Price (USD)</label>
+                        <input type="text" name="price" value="{{ old('price', $movie->price) }}"
+                            placeholder="9.99"
+                            class="w-full px-4 py-3 rounded-lg bg-onyx text-soft-white border border-gold/20">
+                        @error('price')
+                            <p class="text-sm text-red-400 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">

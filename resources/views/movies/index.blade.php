@@ -72,12 +72,16 @@
 
                             <div class="flex items-center gap-2 text-silver text-sm mb-1">
                                 <span>🎭</span>
-                                <span>{{ $movie->genre->genreName }}</span>
+                                <span>{{ $movie->genres->pluck('genreName')->join(', ') }}</span>
                             </div>
 
                             <div class="flex items-center gap-2 text-silver text-sm mb-4">
                                 <span>⏱️</span>
                                 <span>{{ \Carbon\Carbon::parse($movie->duration)->format('H\h i\m') }}</span>
+                                @if (!empty($movie->price))
+                                    <span class="ml-3">• <span
+                                            class="text-gold font-semibold">${{ number_format($movie->price, 2) }}</span></span>
+                                @endif
                             </div>
 
                             <!-- Action Buttons -->
@@ -107,3 +111,4 @@
     </section>
 
 </x-layout>
+

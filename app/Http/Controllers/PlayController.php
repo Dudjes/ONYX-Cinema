@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\play;
+use App\Models\play as PlayModel;
+use App\Models\Movie;
+use App\Models\Hall;
+use App\Models\Cinema;
 use Illuminate\Http\Request;
 
 class PlayController extends Controller
@@ -12,7 +15,8 @@ class PlayController extends Controller
      */
     public function index()
     {
-        //
+        $plays = PlayModel::with(['movie', 'hall', 'cinema'])->latest()->get();
+        return view('plays.index', compact('plays'));
     }
 
     /**
@@ -20,7 +24,10 @@ class PlayController extends Controller
      */
     public function create()
     {
-        //
+        $movies = Movie::all();
+        $halls = Hall::all();
+        $cinemas = Cinema::all();
+        return view('plays.create', compact('movies', 'halls', 'cinemas'));
     }
 
     /**
@@ -28,7 +35,16 @@ class PlayController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'when' => 'required|date',
+            'movieId' => 'required|exists:movies,movieId',
+            'hallId' => 'required|exists:halls,hallId',
+            'cinemaId' => 'required|exists:cinemas,cinemaId',
+        ]);
+
+        PlayModel::create($data);
+
+        return redirect()->route('plays.index')->with('status', 'Play created.');
     }
 
     /**
@@ -36,7 +52,7 @@ class PlayController extends Controller
      */
     public function show(play $play)
     {
-        //
+        return view('plays.show', compact('play'));
     }
 
     /**
@@ -44,7 +60,10 @@ class PlayController extends Controller
      */
     public function edit(play $play)
     {
-        //
+        $movies = Movie::all();
+        $halls = Hall::all();
+        $cinemas = Cinema::all();
+        return view('plays.edit', compact('play', 'movies', 'halls', 'cinemas'));
     }
 
     /**
@@ -52,7 +71,16 @@ class PlayController extends Controller
      */
     public function update(Request $request, play $play)
     {
-        //
+        $data = $request->validate([
+            'when' => 'required|date',
+            'movieId' => 'required|exists:movies,movieId',
+            'hallId' => 'required|exists:halls,hallId',
+            'cinemaId' => 'required|exists:cinemas,cinemaId',
+        ]);
+
+        $play->update($data);
+
+        return redirect()->route('plays.show', $play)->with('status', 'Play updated.');
     }
 
     /**
@@ -60,6 +88,7 @@ class PlayController extends Controller
      */
     public function destroy(play $play)
     {
-        //
+        $play->delete();
+        return redirect()->route('plays.index')->with('status', 'Play deleted.');
     }
 }

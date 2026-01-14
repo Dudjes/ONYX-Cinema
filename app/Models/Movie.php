@@ -16,12 +16,17 @@ class Movie extends Model
         'duration',
         'description',
         'image',
+        'price',
         'isDeleted',
-        'genreId',
     ];
 
-    public function genre()
+    public function genres()
     {
-        return $this->belongsTo(Genre::class, 'genreId', 'genreId');
+        return $this->belongsToMany(Genre::class, '_movie__genre', 'movieId', 'genreId');
+    }
+
+    public function plays()
+    {
+        return $this->hasMany(Play::class, 'movieId', 'movieId');
     }
 }

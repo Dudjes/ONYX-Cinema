@@ -7,7 +7,7 @@
                 <div class="lg:col-span-1">
                     <div class="bg-charcoal rounded-2xl overflow-hidden shadow-lg">
                         @if (!empty($movie->image))
-                            <img src="{{$movie->image}}" alt="movieImage">
+                            <img src="{{ $movie->image }}" alt="movieImage">
                         @else
                             <div
                                 class="w-full h-96 flex items-center justify-center bg-gradient-to-br from-charcoal via-gold/20 to-gold">
@@ -22,9 +22,14 @@
 
                     <div class="flex items-center gap-4 text-silver mb-6">
                         <div class="px-3 py-1 bg-gold text-onyx rounded-md">{{ $movie->ageRequirement }}</div>
-                        <div class="flex items-center gap-2">🎭 <span>{{ $movie->genre->genreName }}</span></div>
+                        <div class="flex items-center gap-2">🎭
+                            <span>{{ $movie->genres->pluck('genreName')->join(', ') }}</span></div>
                         <div class="flex items-center gap-2">⏱️
-                            <span>{{ \Carbon\Carbon::parse($movie->duration)->format('H\h i\m') }}</span></div>
+                            <span>{{ \Carbon\Carbon::parse($movie->duration)->format('H\h i\m') }}</span>
+                        </div>
+                        @if (!empty($movie->price))
+                            <div class="ml-4 text-gold font-semibold">${{ number_format($movie->price, 2) }}</div>
+                        @endif
                     </div>
 
                     <div class="prose prose-invert text-silver mb-8">

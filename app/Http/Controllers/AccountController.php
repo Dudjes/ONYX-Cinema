@@ -12,7 +12,8 @@ class AccountController extends Controller
      */
     public function index()
     {
-        //
+        $accounts = Account::latest()->get();
+        return view('accounts.index', compact('accounts'));
     }
 
     /**
@@ -20,7 +21,7 @@ class AccountController extends Controller
      */
     public function create()
     {
-        //
+        return view('accounts.create');
     }
 
     /**
@@ -28,7 +29,18 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:accounts,email',
+            'password' => 'required|string|min:6',
+        ]);
+
+        $data['password'] = bcrypt($data['password']);
+
+        Account::create($data);
+
+        return redirect()->route('accounts.index')->with('status', 'Account created.');
     }
 
     /**
@@ -36,7 +48,7 @@ class AccountController extends Controller
      */
     public function show(Account $account)
     {
-        //
+        return view('accounts.show', compact('account'));
     }
 
     /**
@@ -44,7 +56,7 @@ class AccountController extends Controller
      */
     public function edit(Account $account)
     {
-        //
+        return view('accounts.edit', compact('account'));
     }
 
     /**
@@ -52,7 +64,22 @@ class AccountController extends Controller
      */
     public function update(Request $request, Account $account)
     {
-        //
+        $data = $request->validate([
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:accounts,email,' . $account->accountId . ',accountId',
+            'password' => 'nullable|string|min:6',
+        ]);
+
+        if (!empty($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        } else {
+            unset($data['password']);
+        }
+
+        $account->update($data);
+
+        return redirect()->route('accounts.show', $account)->with('status', 'Account updated.');
     }
 
     /**
@@ -60,6 +87,7 @@ class AccountController extends Controller
      */
     public function destroy(Account $account)
     {
-        //
+        $account->delete();
+        return redirect()->route('accounts.index')->with('status', 'Account deleted.');
     }
 }

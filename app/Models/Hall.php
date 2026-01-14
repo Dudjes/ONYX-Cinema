@@ -6,5 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hall extends Model
 {
-    //
+    protected $primaryKey = 'hallId';
+
+    public function cinema()
+    {
+        return $this->belongsTo(Cinema::class, 'cinemaId', 'cinemaId');
+    }
+
+    public function plays()
+    {
+        return $this->hasMany(Play::class, 'hallId', 'hallId');
+    }
 }

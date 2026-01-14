@@ -20,9 +20,21 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'firstname',
+        'lastname',
         'email',
         'password',
     ];
+
+    protected $casts = [
+        // keep compatibility with existing cast method
+    ];
+
+    // user can have many tickets (keeps compatibility)
+    public function tickets()
+    {
+        return $this->hasMany(\App\Models\Ticket::class, 'userId', 'id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -54,7 +66,7 @@ class User extends Authenticatable
     {
         return Str::of($this->name)
             ->explode(' ')
-            ->map(fn (string $name) => Str::of($name)->substr(0, 1))
+            ->map(fn(string $name) => Str::of($name)->substr(0, 1))
             ->implode('');
     }
 }
