@@ -22,7 +22,7 @@ class StorePlayRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'when' => 'required|datetime',
+            'when' => 'required|date',
             'movieId' => 'required',
             'hallId' => 'required',
             'cinemaId' => 'required',

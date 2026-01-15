@@ -15,11 +15,88 @@ class TicketController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tickets = Ticket::with(['play.movie', 'user'])->latest()->get();
-        return view('tickets.index', compact('tickets'));
+        $query = Ticket::with(['play.movie', 'play.cinema', 'user']);
+
+        // Filter by movie
+        if ($request->filled('movie')) {
+            $query->whereHas('play.movie', function($q) use ($request) {
+                $q->where('movieId', $request->movie);
+            });
+        }
+
+        // Filter by cinema
+        if ($request->filled('cinema')) {
+            $query->whereHas('play.cinema', function($q) use ($request) {
+                $q->where('cinemaId', $request->cinema);
+            });
+        }
+
+        // Filter by user
+        if ($request->filled('user')) {
+            $query->whereHas('user', function($q) use ($request) {
+                $q->where('firstname', 'like', '%'.$request->user.'%')
+                ->orWhere('name', 'like', '%'.$request->user.'%');
+            });
+        }
+
+        // Filter by play date
+        if ($request->filled('date')) {
+            $query->whereDate('created_at', $request->date);
+        }
+
+        $tickets = $query->get()->sortBy(function($ticket) use ($request) {
+            return $ticket->user->firstname ?? $ticket->user->name ?? '';
+        }, SORT_REGULAR, $request->get('order', 'asc') === 'desc');
+
+        // Pass movies and cinemas for the filters
+        $movies = \App\Models\Movie::all();
+        $cinemas = \App\Models\Cinema::all();
+
+        return view('tickets.index', compact('tickets', 'movies', 'cinemas'));
     }
+
+    public function dashboard(Request $request)
+    {
+        // Load all tickets with relationships
+        $ticketsQuery = Ticket::with(['play.movie', 'play.cinema', 'user']);
+
+        // Optional filters (applied to tickets)
+        if ($request->filled('movie')) {
+            $ticketsQuery->whereHas('play.movie', fn($q) => $q->where('movieId', $request->movie));
+        }
+
+        if ($request->filled('cinema')) {
+            $ticketsQuery->whereHas('play.cinema', fn($q) => $q->where('cinemaId', $request->cinema));
+        }
+
+        if ($request->filled('user')) {
+            $ticketsQuery->whereHas('user', fn($q) => $q->where('firstname', 'like', '%'.$request->user.'%')
+                                                        ->orWhere('name', 'like', '%'.$request->user.'%'));
+        }
+
+        if ($request->filled('date')) {
+            $ticketsQuery->whereDate('created_at', $request->date);
+        }
+
+        $tickets = $ticketsQuery->get();
+
+        // Calculate stats based on plays
+        $totalSeats = \App\Models\Play::with('hall')->get()->sum(fn($play) => $play->hall->capacity);
+
+        $soldTickets = Ticket::where('isSold', 1)->count(); // total sold tickets
+        $availableTickets = $totalSeats - $soldTickets;    // remaining seats
+
+        return view('tickets.dashboard', compact(
+            'tickets',
+            'soldTickets',
+            'availableTickets',
+            'totalSeats'
+        ));
+    }
+
+
 
     /**
      * Step 1: choose movie

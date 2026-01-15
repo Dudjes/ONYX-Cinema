@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Cinema extends Model
 {
     protected $primaryKey = 'cinemaId';
+    protected $fillable = [
+        'cinemaName',
+        'adress', 
+        'screenSize'
+    ];
+
 
     public function halls()
     {

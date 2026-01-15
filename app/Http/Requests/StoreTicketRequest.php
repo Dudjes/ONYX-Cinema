@@ -16,8 +16,6 @@ class StoreTicketRequest extends FormRequest
         return [
             'seat' => 'required|string|max:10',
             'playId' => 'required|exists:plays,playId',
-            'userId' => 'required|exists:users,id',
-            'isSold' => 'required|boolean',
         ];
     }
 }

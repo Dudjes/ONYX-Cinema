@@ -33,11 +33,12 @@
                     <label class="block text-sm font-semibold text-silver mb-2">
                         Address
                     </label>
-                    <input name="address" type="text"
-                           class="w-full bg-onyx border border-white/10 rounded-lg px-4 py-3
-                                  text-soft-white focus:outline-none focus:ring-2 focus:ring-gold"
-                           placeholder="e.g. Kerkstraat 12, Haarlem">
+                    <input name="adress" type="text"
+                        class="w-full bg-onyx border border-white/10 rounded-lg px-4 py-3
+                                text-soft-white focus:outline-none focus:ring-2 focus:ring-gold"
+                        placeholder="e.g. Kerkstraat 12, Haarlem">
                 </div>
+
 
                 <!-- Screen Size -->
                 <div>

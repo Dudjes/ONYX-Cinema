@@ -6,7 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Play extends Model
 {
-    protected $primaryKey = 'playId';
+    protected $primaryKey = 'playId'; 
+
+    protected $fillable = [
+        'movieId',
+        'hallId',
+        'cinemaId',
+        'when',   
+    ];
 
     public function movie()
     {

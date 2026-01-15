@@ -1,4 +1,3 @@
-{{-- resources/views/movies/index.blade.php --}}
 <x-layout title="Movies - ONYX Cinema">
 
     <!-- Hero Section -->
@@ -176,7 +175,7 @@
 
                             <!-- Action Buttons -->
                             <div class="flex gap-2">
-                                <a href="{{ route('tickets.create') }}"
+                                <a href="{{ route('tickets.choosePlay', $movie) }}"
                                     class="flex-1 bg-gold text-onyx py-3 rounded-lg font-semibold text-center hover:bg-cyan hover:scale-105 transition-all duration-300">
                                     Book Now
                                 </a>

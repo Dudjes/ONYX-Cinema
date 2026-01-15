@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Ticket extends Model
 {
     protected $primaryKey = 'ticketId';
+    protected $fillable = [
+        'seat', 
+        'playId', 
+        'userId', 
+        'isSold',
+    ];
 
     public function play()
     {

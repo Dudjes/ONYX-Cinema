@@ -33,13 +33,19 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
     Route::get('/movies/dashboard', [MovieController::class, 'dashboard'])->name('movies.dashboard');
 
+    // Tickets dashboard
+    Route::get('/tickets/dashboard', [TicketController::class, 'dashboard'])->name('tickets.dashboard');
+
     //All pages in one
-    Route::resource('accounts', AccountController::class);
     Route::resource('cinemas', CinemaController::class);
     Route::resource('genres', GenreController::class);
     Route::resource('halls', HallController::class);
     Route::resource('plays', PlayController::class);
     Route::resource('tickets', TicketController::class);
+
+    
+
+
 
     //making a ticket
     Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');

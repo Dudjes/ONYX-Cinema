@@ -16,9 +16,11 @@ class PlayController extends Controller
      */
     public function index()
     {
-        $plays = Play::with(['movie', 'hall', 'cinema'])->latest()->get();
+        $plays = Play::with(['movie', 'hall', 'cinema', 'tickets'])->latest()->get();
+
         return view('plays.index', compact('plays'));
     }
+
 
     /**
      * Show the form for creating a new resource.

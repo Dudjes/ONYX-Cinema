@@ -17,16 +17,28 @@
             <form action="{{ route('plays.store') }}" method="POST" class="space-y-6">
                 @csrf
 
+                {{-- Validation Errors --}}
+                @if ($errors->any())
+                    <div class="bg-red-600 text-white p-3 rounded-lg mb-4">
+                        <ul class="list-disc list-inside text-sm">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <!-- Movie -->
                 <div>
                     <label class="block text-sm font-semibold text-silver mb-2">
                         Movie
                     </label>
-                    <select name="movieId"
+                    <select name="movieId" required
                             class="w-full bg-onyx border border-white/10 rounded-lg px-4 py-3
                                    text-soft-white focus:outline-none focus:ring-2 focus:ring-gold">
+                        <option value="" disabled selected>Select a movie</option>
                         @foreach ($movies as $m)
-                            <option value="{{ $m->movieId }}">
+                            <option value="{{ $m->movieId }}" {{ old('movieId') == $m->movieId ? 'selected' : '' }}>
                                 {{ $m->movieName }}
                             </option>
                         @endforeach
@@ -38,11 +50,12 @@
                     <label class="block text-sm font-semibold text-silver mb-2">
                         Hall
                     </label>
-                    <select name="hallId"
+                    <select name="hallId" required
                             class="w-full bg-onyx border border-white/10 rounded-lg px-4 py-3
                                    text-soft-white focus:outline-none focus:ring-2 focus:ring-gold">
+                        <option value="" disabled selected>Select a hall</option>
                         @foreach ($halls as $h)
-                            <option value="{{ $h->hallId }}">
+                            <option value="{{ $h->hallId }}" {{ old('hallId') == $h->hallId ? 'selected' : '' }}>
                                 Hall {{ $h->hallNumber }}
                                 {{ $h->cinema ? '– ' . $h->cinema->cinemaName : '' }}
                             </option>
@@ -55,11 +68,12 @@
                     <label class="block text-sm font-semibold text-silver mb-2">
                         Cinema
                     </label>
-                    <select name="cinemaId"
+                    <select name="cinemaId" required
                             class="w-full bg-onyx border border-white/10 rounded-lg px-4 py-3
                                    text-soft-white focus:outline-none focus:ring-2 focus:ring-gold">
+                        <option value="" disabled selected>Select a cinema</option>
                         @foreach ($cinemas as $c)
-                            <option value="{{ $c->cinemaId }}">
+                            <option value="{{ $c->cinemaId }}" {{ old('cinemaId') == $c->cinemaId ? 'selected' : '' }}>
                                 {{ $c->cinemaName }}
                             </option>
                         @endforeach
@@ -71,9 +85,9 @@
                     <label class="block text-sm font-semibold text-silver mb-2">
                         Showtime
                     </label>
-                    <input type="datetime-local" name="when"
+                    <input type="datetime-local" name="when" value="{{ old('when') }}" required
                            class="w-full bg-onyx border border-white/10 rounded-lg px-4 py-3
-                            text-soft-white focus:outline-none focus:ring-2 focus:ring-gold">
+                                  text-soft-white focus:outline-none focus:ring-2 focus:ring-gold">
                 </div>
 
                 <!-- Actions -->
