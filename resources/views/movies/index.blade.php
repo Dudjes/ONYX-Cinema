@@ -18,10 +18,100 @@
         </div>
     </section>
 
-    <!-- Movies Grid -->
+    <!-- Filters Section & Movies Grid -->
     <section class="py-16 px-6 lg:px-12">
         <div class="container mx-auto">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <div class="flex flex-col lg:flex-row gap-8">
+                
+                <!-- Sidebar Filters -->
+                <aside class="lg:w-80 flex-shrink-0">
+                    <div class="bg-charcoal rounded-2xl p-6 sticky top-6">
+                        <form method="GET" action="{{ route('movies.index') }}" class="space-y-6">
+                            
+                            <!-- Filter Header -->
+                            <div class="flex items-center justify-between pb-4 border-b border-gold/20">
+                                <h3 class="text-xl font-semibold text-gold">🔍 Filters</h3>
+                                <a href="{{ route('movies.index') }}" class="text-sm text-silver hover:text-gold transition-colors">
+                                    Clear
+                                </a>
+                            </div>
+
+                            <!-- Genre Filter -->
+                            <div>
+                                <label class="block text-sm font-semibold text-soft-white mb-3">Genre</label>
+                                <select name="genre" class="w-full bg-onyx border border-charcoal text-soft-white px-4 py-2.5 rounded-lg focus:border-gold focus:outline-none transition-colors">
+                                    <option value="">All Genres</option>
+                                    @foreach($genres as $genre)
+                                        <option value="{{ $genre->genreId }}" {{ request('genre') == $genre->genreId ? 'selected' : '' }}>
+                                            {{ $genre->genreName }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Cinema Filter -->
+                            <div>
+                                <label class="block text-sm font-semibold text-soft-white mb-3">Cinema</label>
+                                <select name="cinema" class="w-full bg-onyx border border-charcoal text-soft-white px-4 py-2.5 rounded-lg focus:border-gold focus:outline-none transition-colors">
+                                    <option value="">All Cinemas</option>
+                                    @foreach($cinemas as $cinema)
+                                        <option value="{{ $cinema->cinemaId }}" {{ request('cinema') == $cinema->cinemaId ? 'selected' : '' }}>
+                                            {{ $cinema->cinemaName }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Age Requirement Filter -->
+                            <div>
+                                <label class="block text-sm font-semibold text-soft-white mb-3">Age Rating</label>
+                                <select name="age" class="w-full bg-onyx border border-charcoal text-soft-white px-4 py-2.5 rounded-lg focus:border-gold focus:outline-none transition-colors">
+                                    <option value="">All Ages</option>
+                                    <option value="0" {{ request('age') == '0' ? 'selected' : '' }}>All Ages (0+)</option>
+                                    <option value="12" {{ request('age') == '12' ? 'selected' : '' }}>12+</option>
+                                    <option value="16" {{ request('age') == '16' ? 'selected' : '' }}>16+</option>
+                                    <option value="18" {{ request('age') == '18' ? 'selected' : '' }}>18+</option>
+                                </select>
+                            </div>
+
+                            <!-- Price Range -->
+                            <div>
+                                <label class="block text-sm font-semibold text-soft-white mb-3">Price Range ($)</label>
+                                <div class="space-y-3">
+                                    <input type="number" name="min_price" value="{{ request('min_price') }}" 
+                                        step="0.01" min="0" 
+                                        placeholder="Min: 0.00"
+                                        class="w-full bg-onyx border border-charcoal text-soft-white px-4 py-2.5 rounded-lg focus:border-gold focus:outline-none transition-colors">
+                                    <input type="number" name="max_price" value="{{ request('max_price') }}" 
+                                        step="0.01" min="0" 
+                                        placeholder="Max: 50.00"
+                                        class="w-full bg-onyx border border-charcoal text-soft-white px-4 py-2.5 rounded-lg focus:border-gold focus:outline-none transition-colors">
+                                </div>
+                            </div>
+
+                            <!-- Sort By -->
+                            <div>
+                                <label class="block text-sm font-semibold text-soft-white mb-3">Sort By</label>
+                                <select name="sort" class="w-full bg-onyx border border-charcoal text-soft-white px-4 py-2.5 rounded-lg focus:border-gold focus:outline-none transition-colors">
+                                    <option value="movieName" {{ request('sort') == 'movieName' ? 'selected' : '' }}>Name (A-Z)</option>
+                                    <option value="price" {{ request('sort') == 'price' ? 'selected' : '' }}>Price (Low-High)</option>
+                                    <option value="duration" {{ request('sort') == 'duration' ? 'selected' : '' }}>Duration</option>
+                                    <option value="age" {{ request('sort') == 'age' ? 'selected' : '' }}>Age Rating</option>
+                                </select>
+                            </div>
+
+                            <!-- Apply Button -->
+                            <button type="submit" class="w-full bg-gold text-onyx py-3 rounded-lg font-semibold hover:bg-cyan hover:scale-105 transition-all duration-300">
+                                Apply Filters
+                            </button>
+
+                        </form>
+                    </div>
+                </aside>
+
+                <!-- Movies Grid -->
+                <div class="flex-1">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
                 @forelse($movies as $movie)
                     <!-- Movie Card -->
@@ -86,7 +176,7 @@
 
                             <!-- Action Buttons -->
                             <div class="flex gap-2">
-                                <a href="#"
+                                <a href="{{ route('tickets.create') }}"
                                     class="flex-1 bg-gold text-onyx py-3 rounded-lg font-semibold text-center hover:bg-cyan hover:scale-105 transition-all duration-300">
                                     Book Now
                                 </a>
@@ -106,9 +196,105 @@
                         <p class="text-silver">Check back soon for new releases!</p>
                     </div>
                 @endforelse
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
 
-</x-layout>
+</x-layout><!-- Add this section right after the Hero Section and before the Movies Grid -->
+<section class="py-8 px-6 lg:px-12 bg-charcoal/50">
+    <div class="container mx-auto">
+        <form method="GET" action="{{ route('movies.index') }}" class="space-y-4">
+            
+            <!-- Filter Header -->
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-semibold text-gold">🔍 Filter Movies</h3>
+                <a href="{{ route('movies.index') }}" class="text-sm text-silver hover:text-gold transition-colors">
+                    Clear Filters
+                </a>
+            </div>
 
+            <!-- Filters Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <!-- Genre Filter -->
+                <div>
+                    <label class="block text-sm text-silver mb-2">Genre</label>
+                    <select name="genre" class="w-full bg-onyx border border-charcoal text-soft-white px-4 py-2 rounded-lg focus:border-gold focus:outline-none">
+                        <option value="">All Genres</option>
+                        @foreach($genres as $genre)
+                            <option value="{{ $genre->genreId }}" {{ request('genre') == $genre->genreId ? 'selected' : '' }}>
+                                {{ $genre->genreName }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Cinema Filter -->
+                <div>
+                    <label class="block text-sm text-silver mb-2">Cinema</label>
+                    <select name="cinema" class="w-full bg-onyx border border-charcoal text-soft-white px-4 py-2 rounded-lg focus:border-gold focus:outline-none">
+                        <option value="">All Cinemas</option>
+                        @foreach($cinemas as $cinema)
+                            <option value="{{ $cinema->cinemaId }}" {{ request('cinema') == $cinema->cinemaId ? 'selected' : '' }}>
+                                {{ $cinema->cinemaName }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Age Requirement Filter -->
+                <div>
+                    <label class="block text-sm text-silver mb-2">Max Age Rating</label>
+                    <select name="age" class="w-full bg-onyx border border-charcoal text-soft-white px-4 py-2 rounded-lg focus:border-gold focus:outline-none">
+                        <option value="">All Ages</option>
+                        <option value="0" {{ request('age') == '0' ? 'selected' : '' }}>All Ages (0+)</option>
+                        <option value="12" {{ request('age') == '12' ? 'selected' : '' }}>12+</option>
+                        <option value="16" {{ request('age') == '16' ? 'selected' : '' }}>16+</option>
+                        <option value="18" {{ request('age') == '18' ? 'selected' : '' }}>18+</option>
+                    </select>
+                </div>
+
+                <!-- Sort By -->
+                <div>
+                    <label class="block text-sm text-silver mb-2">Sort By</label>
+                    <select name="sort" class="w-full bg-onyx border border-charcoal text-soft-white px-4 py-2 rounded-lg focus:border-gold focus:outline-none">
+                        <option value="movieName" {{ request('sort') == 'movieName' ? 'selected' : '' }}>Name</option>
+                        <option value="price" {{ request('sort') == 'price' ? 'selected' : '' }}>Price</option>
+                        <option value="duration" {{ request('sort') == 'duration' ? 'selected' : '' }}>Duration</option>
+                        <option value="age" {{ request('sort') == 'age' ? 'selected' : '' }}>Age Rating</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- Price Range -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm text-silver mb-2">Min Price ($)</label>
+                    <input type="number" name="min_price" value="{{ request('min_price') }}" 
+                        step="0.01" min="0" 
+                        placeholder="0.00"
+                        class="w-full bg-onyx border border-charcoal text-soft-white px-4 py-2 rounded-lg focus:border-gold focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm text-silver mb-2">Max Price ($)</label>
+                    <input type="number" name="max_price" value="{{ request('max_price') }}" 
+                        step="0.01" min="0" 
+                        placeholder="50.00"
+                        class="w-full bg-onyx border border-charcoal text-soft-white px-4 py-2 rounded-lg focus:border-gold focus:outline-none">
+                </div>
+            </div>
+
+            <!-- Apply Button -->
+            <div class="flex justify-end">
+                <button type="submit" class="bg-gold text-onyx px-8 py-3 rounded-lg font-semibold hover:bg-cyan hover:scale-105 transition-all duration-300">
+                    Apply Filters
+                </button>
+            </div>
+
+        </form>
+    </div>
+</section>

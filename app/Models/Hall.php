@@ -8,6 +8,12 @@ class Hall extends Model
 {
     protected $primaryKey = 'hallId';
 
+    protected $fillable = [
+        'hallName',
+        'cinemaId',
+        'seats', 
+    ];
+
     public function cinema()
     {
         return $this->belongsTo(Cinema::class, 'cinemaId', 'cinemaId');

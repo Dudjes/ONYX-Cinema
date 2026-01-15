@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Ticket;
-use App\Models\play as PlayModel;
+use App\Models\Play;
 use App\Models\User;
 
 class TicketSeeder extends Seeder
@@ -14,22 +14,34 @@ class TicketSeeder extends Seeder
      */
     public function run(): void
     {
-        $plays = PlayModel::all();
+        $plays = Play::all();
         $users = User::all();
+
+        if ($plays->isEmpty() || $users->isEmpty()) {
+            $this->command->warn('No plays or users found. Skipping ticket seeding.');
+            return;
+        }
 
         $tickets = [];
 
         foreach ($plays as $play) {
-            // create a few sample seats for each play
-            for ($i = 1; $i <= 8; $i++) {
-                $seat = 'A' . $i;
+            // Get hall capacity
+            $capacity = $play->hall->capacity ?? 64; 
+            $seatsToCreate = min(rand(3, 8), $capacity); // Random 3-8 seats per play
+
+            // Get random seat numbers without duplicates for this play
+            $availableSeats = range(1, $capacity);
+            shuffle($availableSeats);
+            $selectedSeats = array_slice($availableSeats, 0, $seatsToCreate);
+
+            foreach ($selectedSeats as $seatNumber) {
                 $user = $users->random();
 
                 $tickets[] = [
-                    'seat' => $seat,
+                    'seat' => $seatNumber,
                     'playId' => $play->playId,
                     'userId' => $user->id,
-                    'isSold' => (bool) rand(0, 1),
+                    'isSold' => 1, // Mark as sold 
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
@@ -38,6 +50,7 @@ class TicketSeeder extends Seeder
 
         if (!empty($tickets)) {
             Ticket::insert($tickets);
+            $this->command->info('Created ' . count($tickets) . ' tickets.');
         }
     }
 }

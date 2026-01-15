@@ -12,15 +12,67 @@ class MovieController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $movies = Movie::with('genres')->get(); 
-        return view('movies.index', compact('movies'));
+        $query = Movie::with('genres');
+
+        // Filter by genre
+        if ($request->filled('genre')) {
+            $query->whereHas('genres', function ($q) use ($request) {
+                $q->where('genres.genreId', $request->genre);
+            });
+        }
+
+        // Filter by age requirement
+        if ($request->filled('age')) {
+            $query->where('ageRequirement', '<=', $request->age);
+        }
+
+        // Filter by price range
+        if ($request->filled('min_price')) {
+            $query->where('price', '>=', $request->min_price);
+        }
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        // Filter by cinema (through plays relationship)
+        if ($request->filled('cinema')) {
+            $query->whereHas('plays', function ($q) use ($request) {
+                $q->where('plays.cinemaId', $request->cinema);
+            });
+        }
+
+        // Sorting
+        $sortBy = $request->get('sort', 'movieName');
+        $sortOrder = $request->get('order', 'asc');
+
+        switch ($sortBy) {
+            case 'price':
+                $query->orderBy('price', $sortOrder);
+                break;
+            case 'duration':
+                $query->orderBy('duration', $sortOrder);
+                break;
+            case 'age':
+                $query->orderBy('ageRequirement', $sortOrder);
+                break;
+            default:
+                $query->orderBy('movieName', $sortOrder);
+        }
+
+        $movies = $query->get();
+
+        // Get filter options
+        $genres = \App\Models\Genre::all();
+        $cinemas = \App\Models\Cinema::all();
+
+        return view('movies.index', compact('movies', 'genres', 'cinemas'));
     }
 
     public function dashboard()
     {
-        $movies = Movie::with('genres')->get(); 
+        $movies = Movie::with('genres')->get();
         return view('movies.dashboard', compact('movies'));
     }
 
@@ -57,7 +109,7 @@ class MovieController extends Controller
 
     public function show(Movie $movie)
     {
-        $movie->load('genres'); 
+        $movie->load('genres');
         return view('movies.show', compact('movie'));
     }
 

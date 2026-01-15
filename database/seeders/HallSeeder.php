@@ -18,7 +18,7 @@ class HallSeeder extends Seeder
 
         foreach ($cinemas as $cinema) {
             // create 3 halls per cinema with different capacities
-            $halls[] = ['hallNumber' => 1, 'capacity' => 120, 'cinemaId' => $cinema->cinemaId, 'created_at' => now(), 'updated_at' => now()];
+            $halls[] = ['hallNumber' => 1, 'capacity' => 60, 'cinemaId' => $cinema->cinemaId, 'created_at' => now(), 'updated_at' => now()];
             $halls[] = ['hallNumber' => 2, 'capacity' => 80, 'cinemaId' => $cinema->cinemaId, 'created_at' => now(), 'updated_at' => now()];
             $halls[] = ['hallNumber' => 3, 'capacity' => 50, 'cinemaId' => $cinema->cinemaId, 'created_at' => now(), 'updated_at' => now()];
         }
