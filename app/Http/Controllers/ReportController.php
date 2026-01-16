@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movie;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -20,6 +21,23 @@ class ReportController extends Controller
         $ticketsPerMovie = $tickets->groupBy(fn($ticket) => $ticket->play->movie->movieName ?? 'Unknown')
                                    ->map(fn($tickets) => $tickets->count());
 
-        return view('report.index', compact('user', 'tickets', 'totalTickets', 'totalMovies', 'ticketsPerMovie'));
+        return view('reports.index', compact('user', 'tickets', 'totalTickets', 'totalMovies', 'ticketsPerMovie'));
+    }
+    public function generatePdf()
+    {
+        $user = auth()->user();
+
+        // Tickets for this user
+        $tickets = $user->tickets()->with('play.movie')->get();
+
+        // Basic stats
+        $totalTickets = $tickets->count();
+        $totalMovies = Movie::count();
+        $ticketsPerMovie = $tickets->groupBy(fn($ticket) => $ticket->play->movie->movieName ?? 'Unknown')
+                                   ->map(fn($tickets) => $tickets->count());
+
+        $pdf = PDF::loadView('reports.pdf', compact('user', 'tickets', 'totalTickets', 'totalMovies', 'ticketsPerMovie'));
+
+        return $pdf->download('my_report.pdf');
     }
 }

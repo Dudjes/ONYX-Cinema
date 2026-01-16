@@ -6,13 +6,21 @@
             <h1 class="text-5xl font-bold text-gold mb-12">My Report</h1>
 
             {{-- User info --}}
-            <div class="bg-charcoal rounded-2xl p-8 shadow-xl border border-gold/20 mb-10">
+            <div class="bg-charcoal rounded-2xl p-8 shadow-xl border border-gold/20 mb-4">
                 <h2 class="text-3xl text-gold font-semibold mb-4">My Info</h2>
                 <ul class="text-silver space-y-2">
                     <li><strong>Name:</strong> {{ $user->name }}</li>
                     <li><strong>Email:</strong> {{ $user->email }}</li>
                     <li><strong>Total Tickets Bought:</strong> {{ $totalTickets }}</li>
                 </ul>
+
+                {{-- Generate PDF Button --}}
+                <div class="mt-6">
+                    <a href="{{ route('report.pdf') }}"
+                       class="inline-block bg-gold text-onyx px-6 py-3 rounded-xl font-semibold hover:bg-cyan transition shadow-lg">
+                        📄 Generate PDF Report
+                    </a>
+                </div>
             </div>
 
             {{-- Tickets per movie --}}

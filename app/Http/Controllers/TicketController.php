@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
+use App\Mail\TicketPurchased;
+use Illuminate\Support\Facades\Mail;
 
 class TicketController extends Controller
 {

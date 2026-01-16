@@ -21,6 +21,12 @@
                             Edit Info
                         </a>
                     </div>
+                    <div class="flex justify-start mt-4">
+                        <a href="{{ route('report') }}"
+                        class="bg-gold text-onyx px-4 py-2 rounded-lg font-semibold hover:bg-cyan transition">
+                            Generate report
+                        </a>
+                    </div>
                 </div>
             </div>
 

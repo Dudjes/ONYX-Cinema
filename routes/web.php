@@ -59,6 +59,7 @@ Route::middleware(['auth'])->group(function () {
 
     //raport
     Route::get('/report', [ReportController::class, 'index'])->name('report');
+    Route::get('/report/pdf', [ReportController::class, 'generatePdf'])->name('report.pdf');
 });
 
 // Public movie routes
