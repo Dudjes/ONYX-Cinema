@@ -120,7 +120,7 @@
 
                         <!-- Other Manage links -->
                         <a href="{{ route('movies.dashboard') }}" class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">Movies</a>
-                        <a href="{{ route('accounts.index') }}" class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">Accounts</a>
+                        <a href="{{ route('user.dashboard') }}" class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">Users</a>
                         <a href="{{ route('cinemas.index') }}" class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">Cinemas</a>
                         <a href="{{ route('genres.index') }}" class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">Genres</a>
                         <a href="{{ route('halls.index') }}" class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">Halls</a>
@@ -167,10 +167,7 @@
                 </button>
                 <div id="mobileManageMenu" class="hidden flex-col gap-2 ml-4 mt-2">
                     <a href="{{ route('movies.dashboard') }}" class="text-silver hover:text-cyan transition-colors">🎬 Dashboard</a>
-                    <a href="{{ route('movies.create') }}" class="text-silver hover:text-cyan transition-colors">➕ Create Movie</a>
-                    <a href="#" class="text-silver hover:text-cyan transition-colors">✏️ Update Movie</a>
-                    <a href="#" class="text-silver hover:text-cyan transition-colors">🗑️ Deleted Movies</a>
-                    <a href="{{ route('accounts.index') }}" class="text-silver hover:text-cyan transition-colors">Accounts</a>
+                    <a href="{{ route('user.dashboard') }}" class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">Users</a>
                     <a href="{{ route('cinemas.index') }}" class="text-silver hover:text-cyan transition-colors">Cinemas</a>
                     <a href="{{ route('genres.index') }}" class="text-silver hover:text-cyan transition-colors">Genres</a>
                     <a href="{{ route('halls.index') }}" class="text-silver hover:text-cyan transition-colors">Halls</a>

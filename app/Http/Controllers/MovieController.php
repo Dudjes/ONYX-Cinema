@@ -109,9 +109,15 @@ class MovieController extends Controller
 
     public function show(Movie $movie)
     {
-        $movie->load('genres');
+        $movie->load([
+            'genres',
+            'plays.cinema',
+            'plays.hall',
+        ]);
+
         return view('movies.show', compact('movie'));
     }
+
 
     public function edit(Movie $movie)
     {

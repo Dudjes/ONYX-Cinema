@@ -1,125 +1,74 @@
-<x-layout title="Dashboard - ONYX Cinema">
-    <section class="py-12 px-6 lg:px-12">
+<x-layout title="Dashboard - Users">
+
+    <section class="py-12 px-6 lg:px-12 bg-charcoal/5">
         <div class="container mx-auto">
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                <aside class="lg:col-span-1 bg-charcoal rounded-2xl p-6">
-                    <h3 class="text-lg font-semibold text-gold mb-2">Welcome, {{ Auth::user()->name }}</h3>
-                    <p class="text-sm text-silver">Overview & quick actions</p>
 
-                    <div class="mt-6 space-y-3">
-                        <a href="{{ route('movies.create') }}"
-                            class="block bg-gold text-onyx px-4 py-2 rounded-lg font-semibold hover:bg-cyan transition">Add
-                            Movie</a>
-                        <a href="{{ route('movies.index') }}"
-                            class="block px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold/10">View
-                            Movies</a>
-                    </div>
-                </aside>
-
-                <main class="lg:col-span-3 bg-charcoal rounded-2xl p-6">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-2xl font-display text-gold">Dashboard</h2>
-                        <p class="text-sm text-silver">Quick stats</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="p-4 bg-onyx/30 rounded-lg">
-                            <p class="text-sm text-silver">Movies</p>
-                            <p class="text-2xl text-gold font-bold">{{ \App\Models\Movie::count() }}</p>
-                        </div>
-
-                        <div class="p-4 bg-onyx/30 rounded-lg">
-                            <p class="text-sm text-silver">Cinemas</p>
-                            <p class="text-2xl text-gold font-bold">{{ \App\Models\Cinema::count() }}</p>
-                        </div>
-
-                        <div class="p-4 bg-onyx/30 rounded-lg">
-                            <p class="text-sm text-silver">Tickets</p>
-                            <p class="text-2xl text-gold font-bold">{{ \App\Models\Ticket::count() }}</p>
-                        </div>
-                    </div>
-
-                    <div class="mt-8">
-                        <h3 class="text-lg font-semibold text-gold mb-3">All Movies</h3>
-                        <div class="overflow-x-auto bg-onyx/10 rounded-lg">
-                            <table class="min-w-full divide-y divide-onyx">
-                                <thead class="bg-onyx/20">
-                                    <tr>
-                                        <th class="px-4 py-3 text-left text-xs text-silver">Poster</th>
-                                        <th class="px-4 py-3 text-left text-xs text-silver">Title</th>
-                                        <th class="px-4 py-3 text-left text-xs text-silver">Genre</th>
-                                        <th class="px-4 py-3 text-left text-xs text-silver">Duration</th>
-                                        <th class="px-4 py-3 text-left text-xs text-silver">Price</th>
-                                        <th class="px-4 py-3 text-left text-xs text-silver">Age</th>
-                                        <th class="px-4 py-3 text-left text-xs text-silver">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-onyx/5 divide-y divide-onyx">
-                                    @foreach (\App\Models\Movie::with('genres')->latest()->get() as $movie)
-                                        <tr class="hover:bg-onyx/20">
-                                            <td class="px-4 py-3 align-middle">
-                                                @if (!empty($movie->image))
-                                                    @php
-                                                        $src = \Illuminate\Support\Str::startsWith($movie->image, [
-                                                            'http://',
-                                                            'https://',
-                                                            '//',
-                                                        ])
-                                                            ? $movie->image
-                                                            : asset('storage/' . $movie->image);
-                                                    @endphp
-                                                    <img src="{{ $src }}" alt="{{ $movie->movieName }}"
-                                                        class="w-16 h-20 object-cover rounded" />
-                                                @else
-                                                    <div
-                                                        class="w-16 h-20 bg-gradient-to-br from-charcoal via-gold/20 to-gold rounded flex items-center justify-center">
-                                                        <span class="text-2xl opacity-20">🎬</span>
-                                                    </div>
-                                                @endif
-                                            </td>
-                                            <td class="px-4 py-3 align-middle">
-                                                <div class="text-sm text-soft-white font-semibold">
-                                                    {{ $movie->movieName }}</div>
-                                                <div class="text-xs text-silver">
-                                                    {{ Str::limit($movie->description, 60) }}</div>
-                                            </td>
-                                            <td class="px-4 py-3 align-middle text-sm text-silver">
-                                                {{ $movie->genres->pluck('genreName')->join(', ') ?: '—' }}</td>
-                                            <td class="px-4 py-3 align-middle text-sm text-silver">
-                                                {{ \Carbon\Carbon::parse($movie->duration)->format('H\\h i\\m') }}</td>
-                                            <td class="px-4 py-3 align-middle text-sm text-silver">
-                                                @if ($movie->price)
-                                                    ${{ number_format($movie->price, 2) }}
-                                                @else
-                                                    —
-                                                @endif
-                                            </td>
-                                            <td class="px-4 py-3 align-middle text-sm text-silver">
-                                                {{ $movie->ageRequirement }}</td>
-                                            <td class="px-4 py-3 align-middle">
-                                                <div class="flex items-center gap-2">
-                                                    <a href="{{ route('movies.show', $movie->movieId) }}"
-                                                        class="px-3 py-1 bg-onyx/20 border border-onyx text-silver rounded hover:bg-onyx/30">Details</a>
-                                                    <a href="{{ route('movies.edit', $movie->movieId) }}"
-                                                        class="px-3 py-1 bg-gold text-onyx rounded hover:bg-cyan">Update</a>
-                                                    <form action="{{ route('movies.destroy', $movie->movieId) }}"
-                                                        method="POST" onsubmit="return confirm('Delete this movie?');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit"
-                                                            class="px-3 py-1 border border-red-500 text-red-500 rounded hover:bg-red-500 hover:text-onyx">Delete</button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </main>
+            {{-- Header --}}
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
+                <h2 class="text-3xl font-display text-gold">Users Dashboard</h2>
+                <p class="text-sm text-silver">Overview & quick stats</p>
             </div>
+
+            {{-- Stats Cards --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="p-6 bg-onyx/10 rounded-2xl shadow hover:shadow-lg transition duration-300 text-center">
+                    <div class="flex justify-center mb-2 text-4xl">👥</div>
+                    <p class="text-sm text-silver uppercase tracking-wider">Total Users</p>
+                    <p class="text-3xl text-gold font-bold">{{ $totalUsers }}</p>
+                </div>
+
+                <div class="p-6 bg-onyx/10 rounded-2xl shadow hover:shadow-lg transition duration-300 text-center">
+                    <div class="flex justify-center mb-2 text-4xl">✅</div>
+                    <p class="text-sm text-silver uppercase tracking-wider">Verified Users</p>
+                    <p class="text-3xl text-cyan font-bold">{{ $verifiedUsers }}</p>
+                </div>
+
+                <div class="p-6 bg-onyx/10 rounded-2xl shadow hover:shadow-lg transition duration-300 text-center">
+                    <div class="flex justify-center mb-2 text-4xl">❌</div>
+                    <p class="text-sm text-silver uppercase tracking-wider">Unverified Users</p>
+                    <p class="text-3xl text-red-500 font-bold">{{ $unverifiedUsers }}</p>
+                </div>
+            </div>
+
+            {{-- Users Table --}}
+            <div class="overflow-x-auto bg-onyx/5 rounded-2xl shadow">
+                <table class="min-w-full divide-y divide-onyx">
+                    <thead class="bg-onyx/10 text-soft-white text-xs uppercase tracking-wider">
+                        <tr>
+                            <th class="px-6 py-3 text-left">ID</th>
+                            <th class="px-6 py-3 text-left">Name</th>
+                            <th class="px-6 py-3 text-left">Email</th>
+                            <th class="px-6 py-3 text-left">Verified</th>
+                            <th class="px-6 py-3 text-left">Joined</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-onyx/0 divide-y divide-onyx/20 text-sm text-soft-white">
+                        @forelse($users as $user)
+                            <tr class="hover:bg-onyx/10 transition-colors rounded-lg">
+                                <td class="px-6 py-4">{{ $user->id }}</td>
+                                <td class="px-6 py-4 font-medium">{{ $user->name }}</td>
+                                <td class="px-6 py-4">{{ $user->email }}</td>
+                                <td class="px-6 py-4">
+                                    @if($user->email_verified_at)
+                                        <span class="bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded-full text-xs font-semibold">Verified</span>
+                                    @else
+                                        <span class="bg-red-500/20 text-red-500 px-2 py-1 rounded-full text-xs font-semibold">Unverified</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4">{{ $user->created_at->format('d M Y') }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="px-6 py-6 text-center text-silver">
+                                    No users found.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </section>
-</x-layout>
 
+</x-layout>
