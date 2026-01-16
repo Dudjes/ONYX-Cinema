@@ -14,9 +14,6 @@ use Illuminate\Support\Facades\Mail;
 
 class TicketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $query = Ticket::with(['play.movie', 'play.cinema', 'user']);
@@ -127,7 +124,7 @@ class TicketController extends Controller
      */
     public function chooseSeat(Movie $movie, Play $play)
     {
-        // extra safety: make sure play belongs to movie
+        //makes sure play belongs to movie
         if ($play->movieId !== $movie->movieId) {
             abort(404);
         }
@@ -147,9 +144,6 @@ class TicketController extends Controller
         ));
     }
 
-    /**
-     * Store ticket
-     */
     public function store(StoreTicketRequest $request)
     {
         Ticket::create([
@@ -164,17 +158,11 @@ class TicketController extends Controller
             ->with('status', 'Ticket booked successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Ticket $ticket)
     {
         return view('tickets.show', compact('ticket'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Ticket $ticket)
     {
         $plays = Play::all();
@@ -183,9 +171,6 @@ class TicketController extends Controller
         return view('tickets.edit', compact('ticket', 'plays', 'users'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
         $ticket->update($request->validated());
@@ -195,9 +180,6 @@ class TicketController extends Controller
             ->with('status', 'Ticket updated.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Ticket $ticket)
     {
         $ticket->delete();

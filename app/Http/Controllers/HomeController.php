@@ -14,8 +14,6 @@ class HomeController extends Controller
             ->latest()
             ->take(4)
             ->get();
-
-
         return view('welcome', compact('movies'));
     }
 }

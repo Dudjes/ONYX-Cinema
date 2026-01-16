@@ -9,9 +9,6 @@ use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $query = Movie::with('genres');
@@ -36,7 +33,7 @@ class MovieController extends Controller
             $query->where('price', '<=', $request->max_price);
         }
 
-        // Filter by cinema (through plays relationship)
+        // Filter by cinema through plays 
         if ($request->filled('cinema')) {
             $query->whereHas('plays', function ($q) use ($request) {
                 $q->where('plays.cinemaId', $request->cinema);
@@ -63,7 +60,7 @@ class MovieController extends Controller
 
         $movies = $query->get();
 
-        // Get filter options
+        //Get filter options
         $genres = \App\Models\Genre::all();
         $cinemas = \App\Models\Cinema::all();
 
@@ -85,7 +82,7 @@ class MovieController extends Controller
     public function store(StoreMovieRequest $request)
     {
         $data = $request->validated();
-        $genreIds = isset($data['genre_id']) ? (array) $data['genre_id'] : [];
+        $genreIds = isset($data['genre_id']) ? (array) $data['genre_id'] : []; //force to be array
         if (empty($genreIds)) {
             return back()->withErrors(['genre_id' => 'Genre is required'])->withInput();
         }
@@ -97,8 +94,7 @@ class MovieController extends Controller
             'duration' => $data['duration'],
             'image' => $data['image'] ?? null,
             'price' => $data['price'] ?? null,
-            // keep a primary genre on the movies table for compatibility
-            'genreId' => $genreIds[0] ?? null,
+            'genreId' => $genreIds[0] ?? null, 
             'isDeleted' => null,
         ]);
 
@@ -146,9 +142,6 @@ class MovieController extends Controller
         return redirect()->route('movies.show', $movie)->with('status', 'Movie updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Movie $movie)
     {
         $movie->delete();

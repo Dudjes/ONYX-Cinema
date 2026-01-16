@@ -40,7 +40,7 @@ class UserController extends Controller
     
     public function update(UpdateUserRequest $request)
     {
-        $user = auth()->user(); //het werkt
+        $user = auth()->user(); //works
         $user->update($request->validated());
 
         return redirect()->route('user.info', compact('user'))->with('success', 'Account updated successfully.');
