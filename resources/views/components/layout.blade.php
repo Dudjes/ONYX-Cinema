@@ -101,9 +101,9 @@
                 </a>
 
                 <!-- Schedule / About / Contact -->
-                <a href="{{ url('/schedule') }}" class="relative text-soft-white hover:text-cyan transition-colors duration-300 group {{ Request::is('schedule*') ? 'text-gold' : '' }}">Schedule</a>
-                <a href="{{ url('/about') }}" class="relative text-soft-white hover:text-cyan transition-colors duration-300 group {{ Request::is('about') ? 'text-gold' : '' }}">About</a>
-                <a href="{{ url('/contact') }}" class="relative text-soft-white hover:text-cyan transition-colors duration-300 group {{ Request::is('contact') ? 'text-gold' : '' }}">Contact</a>
+                <a href="#" class="relative text-soft-white hover:text-cyan transition-colors duration-300 group {{ Request::is('schedule*') ? 'text-gold' : '' }}">Schedule</a>
+                <a href="#" class="relative text-soft-white hover:text-cyan transition-colors duration-300 group {{ Request::is('about') ? 'text-gold' : '' }}">About</a>
+                <a href="#" class="relative text-soft-white hover:text-cyan transition-colors duration-300 group {{ Request::is('contact') ? 'text-gold' : '' }}">Contact</a>
 
                 <!-- Authenticated Users: Manage Dropdown -->
                 @auth
