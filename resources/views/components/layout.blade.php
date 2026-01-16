@@ -118,7 +118,6 @@
 
                     <div class="absolute left-0 mt-2 w-56 bg-charcoal border-2 border-gold rounded-lg shadow-[0_0_30px_rgba(212,175,55,0.3)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
 
-                        <!-- Other Manage links -->
                         <a href="{{ route('movies.dashboard') }}" class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">Movies</a>
                         <a href="{{ route('user.dashboard') }}" class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">Users</a>
                         <a href="{{ route('cinemas.index') }}" class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">Cinemas</a>
@@ -132,7 +131,7 @@
 
                 <!-- Authenticated User actions -->
                 @auth
-                    <a href="{{ route('settings.profile.edit') }}" class="text-soft-white hover:text-cyan transition-colors duration-300">My Account</a>
+                    <a href="{{ route('user.info', auth()->user()) }}" class="text-soft-white hover:text-cyan transition-colors duration-300">My Account</a>
                     <form action="{{ route('logout') }}" method="POST" class="inline">
                         @csrf
                         <button type="submit" class="bg-gold text-onyx px-6 py-2.5 rounded-full font-semibold text-sm hover:-translate-y-0.5 hover:shadow-[0_5px_15px_rgba(212,175,55,0.4),0_0_15px_#00E5FF] transition-all duration-300">Logout</button>
@@ -143,49 +142,7 @@
                 @endauth
 
             </nav>
-
-            <!-- Mobile Menu Toggle -->
-            <button id="mobileMenuToggle" class="lg:hidden text-gold text-3xl focus:outline-none">☰</button>
-
         </div>
-
-        <!-- Mobile Navigation -->
-        <nav id="mobileNav" class="lg:hidden hidden flex-col gap-4 mt-6 pb-4">
-            <a href="{{ url('/') }}" class="text-soft-white hover:text-cyan transition-colors">Home</a>
-            <a href="{{ route('movies.index') }}" class="text-soft-white hover:text-cyan transition-colors">🎬 All Movies</a>
-            <a href="{{ url('/schedule') }}" class="text-soft-white hover:text-cyan transition-colors">Schedule</a>
-            <a href="{{ url('/about') }}" class="text-soft-white hover:text-cyan transition-colors">About</a>
-            <a href="{{ url('/contact') }}" class="text-soft-white hover:text-cyan transition-colors">Contact</a>
-
-            @auth
-            <div>
-                <button id="mobileManageToggle" class="text-soft-white hover:text-cyan transition-colors flex items-center gap-2 w-full">
-                    Manage
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div id="mobileManageMenu" class="hidden flex-col gap-2 ml-4 mt-2">
-                    <a href="{{ route('movies.dashboard') }}" class="text-silver hover:text-cyan transition-colors">🎬 Dashboard</a>
-                    <a href="{{ route('user.dashboard') }}" class="block px-4 py-3 text-soft-white hover:bg-gold hover:text-onyx transition-colors duration-200">Users</a>
-                    <a href="{{ route('cinemas.index') }}" class="text-silver hover:text-cyan transition-colors">Cinemas</a>
-                    <a href="{{ route('genres.index') }}" class="text-silver hover:text-cyan transition-colors">Genres</a>
-                    <a href="{{ route('halls.index') }}" class="text-silver hover:text-cyan transition-colors">Halls</a>
-                    <a href="{{ route('plays.index') }}" class="text-silver hover:text-cyan transition-colors">Plays</a>
-                    <a href="{{ route('tickets.index') }}" class="text-silver hover:text-cyan transition-colors">Tickets</a>
-                </div>
-            </div>
-
-            <a href="{{ route('settings.profile.edit') }}" class="text-soft-white hover:text-cyan transition-colors">My Account</a>
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit" class="bg-gold text-onyx px-6 py-2.5 rounded-full font-semibold text-sm w-full">Logout</button>
-            </form>
-            @else
-                <a href="{{ route('login') }}" class="bg-gold text-onyx px-6 py-2.5 rounded-full font-semibold text-sm text-center">Sign In</a>
-                <a href="{{ route('register') }}" class="mt-3 block bg-onyx/20 text-gold px-6 py-2.5 rounded-full font-semibold text-sm text-center">Sign Up</a>
-            @endauth
-        </nav>
     </div>
 </header>
 
