@@ -19,7 +19,6 @@ return new class extends Migration
             $table->time('duration');
             $table->text('description');
             $table->string('image')->nullable();
-            $table->foreignId('genreId')->constrained('genres', 'genreId')->onDelete('cascade');
             $table->timestamps();
         });
     }

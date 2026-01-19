@@ -26,19 +26,24 @@ class ReportController extends Controller
     //make pdf
     public function generatePdf()
     {
-        $user = auth()->user(); //works
+        $user = auth()->user();
 
-        //Tickets for this user
-        $tickets = $user->tickets()->with('play.movie')->get();
+        $tickets = $user->tickets()->with('play.movie', 'play.hall.cinema')->get();
 
-        //Basic stats
         $totalTickets = $tickets->count();
-        $totalMovies = Movie::count();
+        $totalMovies = \App\Models\Movie::count();
         $ticketsPerMovie = $tickets->groupBy(fn($ticket) => $ticket->play->movie->movieName ?? 'Unknown')
-                                   ->map(fn($tickets) => $tickets->count());
+                                ->map(fn($tickets) => $tickets->count());
 
-        $pdf = PDF::loadView('reports.pdf', compact('user', 'tickets', 'totalTickets', 'totalMovies', 'ticketsPerMovie'));
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('reports.pdf', [
+            'user' => $user,
+            'tickets' => $tickets,
+            'totalTickets' => $totalTickets,
+            'totalMovies' => $totalMovies,
+            'ticketsPerMovie' => $ticketsPerMovie,
+        ]);
 
         return $pdf->download('my_report.pdf');
     }
+
 }

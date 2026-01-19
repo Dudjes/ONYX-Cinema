@@ -87,18 +87,9 @@ class MovieController extends Controller
             return back()->withErrors(['genre_id' => 'Genre is required'])->withInput();
         }
 
-        $movie = Movie::create([
-            'movieName' => $data['movieName'],
-            'description' => $data['description'] ?? null,
-            'ageRequirement' => $data['ageRequirement'],
-            'duration' => $data['duration'],
-            'image' => $data['image'] ?? null,
-            'price' => $data['price'] ?? null,
-            'genreId' => $genreIds[0] ?? null, 
-            'isDeleted' => null,
-        ]);
+        $movie = Movie::create($data);
 
-        $movie->genres()->attach($genreIds); // attach one or more
+        $movie->genres()->attach($genreIds); 
 
         return redirect()->route('movies.index')->with('status', 'Movie created successfully.');
     }

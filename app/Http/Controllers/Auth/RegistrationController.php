@@ -22,16 +22,14 @@ class RegistrationController extends Controller
     public function store(RegisterUserRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $validated['password'] = Hash::make($validated['password']);
 
-        // split name into firstname/lastname and create User directly
-        [$firstname, $lastname] = array_pad(explode(' ', $validated['name'], 2), 2, '');
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
 
-        $userData = $validated;
-        $userData['firstname'] = $firstname ?: $validated['name'];
-        $userData['lastname'] = $lastname;
-
-        event(new Registered(($user = User::create($userData))));
+        event(new Registered($user));
 
         Auth::login($user);
 

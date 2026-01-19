@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('ticketId');
             $table->string('seat');
             $table->foreignId('playId')->constrained('plays', 'playId')->onDelete('cascade');
-            $table->foreignId('accountId')->constrained('accounts', 'accountId')->onDelete('cascade');
+            $table->foreignId('userId')->constrained('users', 'id')->onDelete('cascade');
             $table->boolean('isSold');
             $table->timestamps();
         });
